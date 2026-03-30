@@ -171,21 +171,18 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const getDeviceType = () => {
-    if (windowWidth < 480) return 'mobile';
-    if (windowWidth < 768) return 'tablet';
-    if (windowWidth < 1920) return 'desktop';
-    return 'tv';
-  };
-
-  const deviceType = getDeviceType();
-
   const getStatusClass = (status) => {
     return status.toLowerCase().replace('-', '');
   };
 
+  const getReadyColor = (percent) => {
+    if (percent >= 90) return 'green';
+    if (percent >= 50) return 'yellow';
+    return 'red';
+  };
+
   return (
-    <div className={`app-container ${deviceType}`}>
+    <div className="app-container">
       <div className="header">
         <div className="header-content">
           <div className="header-title">
@@ -224,98 +221,59 @@ function App() {
       </div>
 
       <div className="table-container">
-        {deviceType === 'mobile' ? (
-          <div className="mobile-cards">
+        <table className="orders-table">
+          <thead>
+            <tr>
+              <th>STATUS</th>
+              <th>CUT-OFF</th>
+              <th>TIME LEFT</th>
+              <th>CITY</th>
+              <th>DELIVERY #</th>
+              <th>JOB #</th>
+              <th>PRODUCT</th>
+              <th>PRODUCTION</th>
+              <th>TIME IN STATUS</th>
+              <th>RECEIPTED</th>
+              <th>ORDER QTY</th>
+              <th>% READY</th>
+              <th>TRUCK</th>
+              <th>WAREHOUSE</th>
+            </tr>
+          </thead>
+          <tbody>
             {orders.map((order, idx) => (
-              <div key={idx} className={`order-card ${getStatusClass(order.status)}`}>
-                <div className="card-header">
+              <tr key={idx} className={`row-${getStatusClass(order.status)} ${order.status === 'MOVED' ? 'row-moved' : ''}`}>
+                <td className="status-cell">
                   <span className={`status-badge ${getStatusClass(order.status)}`}>
                     {order.status}
                   </span>
-                  <span className="cutoff-time">{order.cutoff}</span>
-                </div>
-                <div className="card-body">
-                  <div className="card-row">
-                    <span className="label">DELIVERY</span>
-                    <span className="value">{order.delivery}</span>
+                </td>
+                <td>{order.cutoff}</td>
+                <td className={order.timeLeft.includes('-') ? 'text-warning' : ''}>{order.timeLeft}</td>
+                <td>{order.city}</td>
+                <td>{order.delivery}</td>
+                <td>{order.job}</td>
+                <td>{order.product}</td>
+                <td>{order.production}</td>
+                <td>{order.timeinStatus}</td>
+                <td>{order.receipted.toLocaleString()}</td>
+                <td>{order.orderQty.toLocaleString()}</td>
+                <td className={`ready-${getReadyColor(order.percentReady)}`}>
+                  <div className="progress-bar">
+                    <div className={`progress-fill ${getReadyColor(order.percentReady)}`} style={{width: `${order.percentReady}%`}}></div>
+                    <span className="progress-text">{order.percentReady}%</span>
                   </div>
-                  <div className="card-row">
-                    <span className="label">CITY</span>
-                    <span className="value">{order.city}</span>
-                  </div>
-                  <div className="card-row">
-                    <span className="label">PRODUCT</span>
-                    <span className="value">{order.product}</span>
-                  </div>
-                  <div className="card-row">
-                    <span className="label">TIME LEFT</span>
-                    <span className={`value ${order.timeLeft.includes('-') ? 'warning' : ''}`}>
-                      {order.timeLeft}
-                    </span>
-                  </div>
-                  <div className="card-row">
-                    <span className="label">% READY</span>
-                    <span className="value">{order.percentReady}%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <table className="orders-table">
-            <thead>
-              <tr>
-                <th>STATUS</th>
-                <th>CUT-OFF</th>
-                <th>TIME LEFT</th>
-                <th>CITY</th>
-                <th>DELIVERY #</th>
-                <th>JOB #</th>
-                <th>PRODUCT</th>
-                <th>PRODUCTION</th>
-                <th>TIME IN STATUS</th>
-                <th>RECEIPTED</th>
-                <th>ORDER QTY</th>
-                <th>% READY</th>
-                <th>TRUCK</th>
-                <th>WAREHOUSE</th>
+                </td>
+                <td>{order.truck}</td>
+                <td>
+                  <span className={`warehouse-badge ${order.warehouse === 'MCC PLANT' ? 'plant' : 'external'}`}>
+                    {order.warehouse === 'MCC PLANT' ? '🏭' : '🚚'} {order.warehouse}
+                  </span>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {orders.map((order, idx) => (
-                <tr key={idx} className={`row-${getStatusClass(order.status)} ${order.status === 'MOVED' ? 'row-moved' : ''}`}>
-                  <td className="status-cell">
-                    <span className={`status-badge ${getStatusClass(order.status)}`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td>{order.cutoff}</td>
-                  <td className={order.timeLeft.includes('-') ? 'text-warning' : ''}>{order.timeLeft}</td>
-                  <td>{order.city}</td>
-                  <td>{order.delivery}</td>
-                  <td>{order.job}</td>
-                  <td>{order.product}</td>
-                  <td>{order.production}</td>
-                  <td>{order.timeinStatus}</td>
-                  <td>{order.receipted.toLocaleString()}</td>
-                  <td>{order.orderQty.toLocaleString()}</td>
-                  <td>
-                    <div className="progress-bar">
-                      <div className={`progress-fill ${order.percentReady >= 90 ? 'green' : order.percentReady >= 50 ? 'yellow' : 'red'}`} style={{ width: `${order.percentReady}%` }}></div>
-                      <span className="progress-text">{order.percentReady}%</span>
-                    </div>
-                  </td>
-                  <td>{order.truck}</td>
-                  <td>
-                    <span className={`warehouse-badge ${order.warehouse === 'MCC PLANT' ? 'plant' : 'external'}`}>
-                      {order.warehouse === 'MCC PLANT' ? '🏭' : '🚚'} {order.warehouse}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <div className="footer">
