@@ -141,7 +141,6 @@ function App() {
   ]);
 
   const [lastUpdated, setLastUpdated] = useState(new Date());
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1920);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -161,14 +160,6 @@ function App() {
     }, 30000);
 
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const getStatusClass = (status) => {
