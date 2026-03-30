@@ -143,19 +143,18 @@ function App() {
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1920);
 
-  // Update metrics every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setMetrics(prev => ({
-        linestoday: Math.floor(Math.random() * (295 - 280)) + 280,
-        ontimePercent: Math.floor(Math.random() * (92 - 75)) + 75,
-        atrisk: Math.floor(Math.random() * (12 - 5)) + 5,
+        linestoday: Math.floor(Math.random() * 15) + 280,
+        ontimePercent: Math.floor(Math.random() * 17) + 75,
+        atrisk: Math.floor(Math.random() * 7) + 5,
         nextcutoff: prev.nextcutoff
       }));
 
       setOrders(prev => prev.map(order => ({
         ...order,
-        receipted: Math.floor(order.receipted + (Math.random() * 10000))
+        receipted: Math.floor(order.receipted + Math.random() * 10000)
       })));
 
       setLastUpdated(new Date());
@@ -164,7 +163,6 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Handle window resize for responsive behavior
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -182,9 +180,12 @@ function App() {
 
   const deviceType = getDeviceType();
 
+  const getStatusClass = (status) => {
+    return status.toLowerCase().replace('-', '');
+  };
+
   return (
     <div className={`app-container ${deviceType}`}>
-      {/* HEADER */}
       <div className="header">
         <div className="header-content">
           <div className="header-title">
@@ -198,13 +199,11 @@ function App() {
         </div>
       </div>
 
-      {/* CONNECTION WARNING */}
       <div className="connection-alert">
         <span className="alert-icon">⚠</span>
         <span className="alert-text">Connection Note: Failed to fetch - Using mock data for demonstration</span>
       </div>
 
-      {/* METRICS CARDS */}
       <div className="metrics-grid">
         <div className="metric-card">
           <div className="metric-label">LINES TODAY</div>
@@ -224,15 +223,13 @@ function App() {
         </div>
       </div>
 
-      {/* ORDERS TABLE */}
       <div className="table-container">
         {deviceType === 'mobile' ? (
-          // MOBILE VIEW - Cards Instead of Table
           <div className="mobile-cards">
             {orders.map((order, idx) => (
-              <div key={idx} className={`order-card ${order.status.toLowerCase().replace('-', '')}`}>
+              <div key={idx} className={`order-card ${getStatusClass(order.status)}`}>
                 <div className="card-header">
-                  <span className={`status-badge ${order.status.toLowerCase().replace('-', '')}`}>
+                  <span className={`status-badge ${getStatusClass(order.status)}`}>
                     {order.status}
                   </span>
                   <span className="cutoff-time">{order.cutoff}</span>
@@ -251,7 +248,7 @@ function App() {
                     <span className="value">{order.product}</span>
                   </div>
                   <div className="card-row">
-                    <span className="label">TIME REMAINING</span>
+                    <span className="label">TIME LEFT</span>
                     <span className={`value ${order.timeLeft.includes('-') ? 'warning' : ''}`}>
                       {order.timeLeft}
                     </span>
@@ -265,7 +262,6 @@ function App() {
             ))}
           </div>
         ) : (
-          // DESKTOP/TABLET/TV VIEW - Full Table
           <table className="orders-table">
             <thead>
               <tr>
@@ -282,14 +278,14 @@ function App() {
                 <th>ORDER QTY</th>
                 <th>% READY</th>
                 <th>TRUCK</th>
-                <th>WAREHOUSE LOCATION</th>
+                <th>WAREHOUSE</th>
               </tr>
             </thead>
             <tbody>
               {orders.map((order, idx) => (
-                <tr key={idx} className={`row-${order.status.toLowerCase().replace('-', '')} ${order.status === 'MOVED' ? 'row-moved' : ''}`}>
+                <tr key={idx} className={`row-${getStatusClass(order.status)} ${order.status === 'MOVED' ? 'row-moved' : ''}`}>
                   <td className="status-cell">
-                    <span className={`status-badge ${order.status.toLowerCase().replace('-', '')}`}>
+                    <span className={`status-badge ${getStatusClass(order.status)}`}>
                       {order.status}
                     </span>
                   </td>
@@ -305,9 +301,7 @@ function App() {
                   <td>{order.orderQty.toLocaleString()}</td>
                   <td>
                     <div className="progress-bar">
-                      <div className={`progress-fill ${order.percentReady >= 90 ? 'green' : order.percentReady >= 50 ? 'yellow' : 'red'}`}
-                        style={{ width: `${order.percentReady}%` }}>
-                      </div>
+                      <div className={`progress-fill ${order.percentReady >= 90 ? 'green' : order.percentReady >= 50 ? 'yellow' : 'red'}`} style={{ width: `${order.percentReady}%` }}></div>
                       <span className="progress-text">{order.percentReady}%</span>
                     </div>
                   </td>
@@ -324,11 +318,10 @@ function App() {
         )}
       </div>
 
-      {/* FOOTER */}
       <div className="footer">
         <div className="footer-content">
           <span>🟢 On Time</span>
-          <span>🟡 Caution (<1hr)</span>
+          <span>🟡 Caution (1hr)</span>
           <span>🔴 Critical (Late)</span>
           <span>🟢 Moved</span>
           <span>🚀 n8n Webhook Connected</span>
