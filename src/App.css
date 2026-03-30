@@ -1,3 +1,8 @@
+/* ============================================
+   MCC LOGISTICS DASHBOARD - RESPONSIVE CSS
+   Works on: Phone, Tablet, Desktop, TV Monitor
+   ============================================ */
+
 * {
   margin: 0;
   padding: 0;
@@ -10,461 +15,759 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   BASE STYLES (Mobile First)
+   ============================================ */
+
+.app-container {
   background-color: #1a1a1a;
   color: #ffffff;
-}
-
-.dashboard {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background: #1a1a1a;
-  overflow: hidden;
-  padding: 20px;
-  gap: 15px;
+  padding: 8px;
 }
 
-/* ====== HEADER ====== */
-.dashboard-header {
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border-bottom: 3px solid #00cc00;
+  margin-bottom: 8px;
+  padding: 12px;
+}
+
+.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 20px;
-  border-radius: 8px;
-  border-left: 4px solid #00cc00;
-  backdrop-filter: blur(10px);
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .header-title h1 {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: bold;
   color: #ffffff;
-  letter-spacing: 1px;
-  margin-bottom: 5px;
+  line-height: 1.2;
+  margin-bottom: 4px;
 }
 
-.header-title p {
-  font-size: 16px;
-  color: #cccccc;
+.header-title .subtitle {
+  font-size: 12px;
+  color: #aaaaaa;
+  margin: 0;
 }
 
-.header-refresh {
+.header-timestamp {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  color: #cccccc;
+  gap: 6px;
+  font-size: 11px;
+  color: #00cc00;
 }
 
-.pulse-indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #00cc00;
-  animation: pulse 2s infinite;
+.live-indicator {
+  display: inline-block;
+  animation: pulse 1.5s infinite;
+  font-size: 12px;
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7);
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 0 10px rgba(0, 204, 0, 0);
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
-/* ====== METRICS CONTAINER ====== */
-.metrics-container {
+/* CONNECTION ALERT */
+.connection-alert {
+  background-color: #8b3333;
+  border: 1px solid #ff3333;
+  color: #ffffff;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.alert-icon {
+  font-size: 14px;
+}
+
+/* METRICS GRID */
+.metrics-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .metric-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 25px;
-  border-radius: 8px;
+  background-color: #2a2a2a;
+  border: 2px solid #333333;
+  border-left: 4px solid #00cc00;
+  padding: 12px;
+  border-radius: 4px;
   text-align: center;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  border-left: 3px solid #00cc00;
 }
 
-.metric-card:hover {
-  background: rgba(255, 255, 255, 0.12);
+.metric-card.at-risk {
+  border-left-color: #ff3333;
 }
 
 .metric-label {
-  font-size: 14px;
+  font-size: 11px;
+  color: #aaaaaa;
   text-transform: uppercase;
-  color: #999999;
-  margin-bottom: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
   font-weight: 600;
-  letter-spacing: 0.5px;
 }
 
 .metric-value {
-  font-size: 42px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: bold;
   color: #00cc00;
-  line-height: 1;
 }
 
-.metric-value.at-risk {
+.metric-card.at-risk .metric-value {
   color: #ff3333;
 }
 
-/* ====== TABLE CONTAINER ====== */
+/* TABLE CONTAINER */
 .table-container {
   flex: 1;
-  overflow: auto;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
+  overflow-x: auto;
+  overflow-y: auto;
+  margin-bottom: 8px;
+  background-color: #1a1a1a;
+  border-radius: 4px;
 }
 
-.shipping-table {
+/* MOBILE CARDS VIEW */
+.mobile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px;
+}
+
+.order-card {
+  background-color: #2a2a2a;
+  border: 2px solid #333333;
+  border-left: 5px solid #666666;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.order-card.late,
+.order-card.critical {
+  border-left-color: #ff3333;
+  background-color: #3a2a2a;
+}
+
+.order-card.ontime {
+  border-left-color: #00cc00;
+}
+
+.order-card.caution {
+  border-left-color: #ffcc00;
+  background-color: #3a3a2a;
+}
+
+.order-card.moved {
+  border-left-color: #00cc00;
+  border-left-width: 8px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #333333;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.status-badge.late,
+.status-badge.critical {
+  background-color: #ff3333;
+  color: #ffffff;
+}
+
+.status-badge.ontime {
+  background-color: #00cc00;
+  color: #000000;
+}
+
+.status-badge.caution {
+  background-color: #ffcc00;
+  color: #000000;
+  animation: flash 1s infinite;
+}
+
+.status-badge.moved {
+  background-color: #00cc00;
+  color: #000000;
+}
+
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.cutoff-time {
+  font-size: 10px;
+  color: #aaaaaa;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #333333;
+  font-size: 11px;
+}
+
+.card-row:last-child {
+  border-bottom: none;
+}
+
+.card-row .label {
+  color: #aaaaaa;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.card-row .value {
+  color: #ffffff;
+  text-align: right;
+  font-weight: 500;
+}
+
+.card-row .value.warning {
+  color: #ff3333;
+  font-weight: bold;
+}
+
+/* DESKTOP TABLE */
+.orders-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 12px;
 }
 
-.shipping-table thead {
+.orders-table thead {
+  background-color: #1a1a1a;
   position: sticky;
   top: 0;
-  background: rgba(0, 0, 0, 0.5);
   z-index: 10;
 }
 
-.shipping-table th {
-  padding: 16px 14px;
+.orders-table th {
+  padding: 10px 8px;
   text-align: left;
-  font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
-  font-size: 13px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-  letter-spacing: 0.5px;
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.shipping-table tbody tr {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
-}
-
-.shipping-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.shipping-table td {
-  padding: 14px;
-  vertical-align: middle;
-  color: #ffffff;
-}
-
-/* ====== ROW STATUS COLORS - MCC PROPOSAL ====== */
-.order-row.status-ontime {
-  background: rgba(255, 255, 255, 0.02);
-  border-left: 4px solid #ffffff;
-}
-
-.order-row.status-ontime td {
-  color: #ffffff;
-}
-
-/* CAUTION - Yellow/Amber (<1 hour from cut-off) */
-.order-row.status-caution {
-  background: rgba(255, 193, 7, 0.15);
-  border-left: 4px solid #ffcc00;
-  animation: cautionFlash 2s infinite;
-}
-
-.order-row.status-caution td {
-  color: #ffff99;
-  font-weight: 500;
-}
-
-@keyframes cautionFlash {
-  0%, 100% {
-    background: rgba(255, 193, 7, 0.15);
-  }
-  50% {
-    background: rgba(255, 193, 7, 0.25);
-  }
-}
-
-/* CRITICAL - Flashing Red (past cut-off) */
-.order-row.status-critical {
-  background: rgba(255, 51, 51, 0.2);
-  border-left: 4px solid #ff3333;
-  animation: criticalFlash 0.8s infinite;
+  color: #00cc00;
   font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #00cc00;
+  white-space: nowrap;
 }
 
-.order-row.status-critical td {
-  color: #ffcccc;
+.orders-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #333333;
+  color: #ffffff;
 }
 
-@keyframes criticalFlash {
-  0%, 100% {
-    background: rgba(255, 51, 51, 0.2);
-  }
-  50% {
-    background: rgba(255, 51, 51, 0.35);
-  }
+.orders-table tbody tr {
+  transition: background-color 0.2s;
 }
 
-/* MOVED - Green (shipped/complete) */
-.order-row.status-moved {
-  background: rgba(0, 204, 0, 0.1);
+.orders-table tbody tr:hover {
+  background-color: #2a2a2a;
+}
+
+/* Row Status Colors */
+.orders-table .row-late,
+.orders-table .row-critical {
+  border-left: 4px solid #ff3333;
+  background-color: #2a1a1a;
+}
+
+.orders-table .row-ontime {
   border-left: 4px solid #00cc00;
 }
 
-.order-row.status-moved td {
-  color: #99ff99;
-  font-weight: 500;
+.orders-table .row-caution {
+  border-left: 4px solid #ffcc00;
+  background-color: #2a2a1a;
+  animation: flashBg 2s infinite;
 }
 
-/* ====== STATUS BADGE ====== */
-.status-badge {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 4px;
-  font-weight: 700;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+@keyframes flashBg {
+  0%, 100% { background-color: #2a2a1a; }
+  50% { background-color: #3a3a2a; }
 }
 
-.status-ontime .status-badge {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+.orders-table .row-moved {
+  border-left: 6px solid #00cc00;
 }
 
-.status-caution .status-badge {
-  background: rgba(255, 193, 7, 0.3);
-  color: #ffff99;
-  border: 1px solid rgba(255, 193, 7, 0.6);
-}
-
-.status-critical .status-badge {
-  background: rgba(255, 51, 51, 0.3);
-  color: #ffcccc;
-  border: 1px solid rgba(255, 51, 51, 0.6);
-}
-
-.status-moved .status-badge {
-  background: rgba(0, 204, 0, 0.3);
-  color: #99ff99;
-  border: 1px solid rgba(0, 204, 0, 0.6);
-}
-
-/* ====== TABLE CELL STYLES ====== */
 .status-cell {
-  font-weight: 700;
+  font-weight: bold;
 }
 
-.city-cell {
-  font-weight: 700;
-  color: #ffff99;
+.text-warning {
+  color: #ff3333;
+  font-weight: bold;
 }
 
-.delivery-cell {
-  font-family: 'Courier New', monospace;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.job-cell {
-  font-family: 'Courier New', monospace;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.production-cell {
-  font-weight: 500;
-  color: #cccccc;
-}
-
-.time-remaining {
-  font-weight: 700;
-  color: #ffff99;
-}
-
-.time-status {
-  color: #999999;
-  font-size: 13px;
-}
-
-.number-cell {
-  text-align: right;
-  font-family: 'Courier New', monospace;
-  color: #cccccc;
-}
-
-.truck-cell {
-  font-weight: 700;
-  color: #99ff99;
-  text-transform: uppercase;
-  font-size: 12px;
-}
-
-/* ====== PROGRESS BAR ====== */
+/* Progress Bar */
 .progress-bar {
   position: relative;
   width: 100%;
-  height: 28px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 4px;
+  height: 20px;
+  background-color: #1a1a1a;
+  border: 1px solid #333333;
+  border-radius: 3px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .progress-fill {
   height: 100%;
   transition: width 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 12px;
-  color: #000000;
 }
 
-.progress-fill.ready {
-  background: linear-gradient(90deg, rgba(0, 204, 0, 0.8), rgba(0, 204, 0, 1));
-}
-
-.progress-fill.not-ready {
-  background: linear-gradient(90deg, rgba(255, 193, 7, 0.7), rgba(255, 193, 7, 0.9));
-}
-
-.percentage-text {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 12px;
-  color: #000000;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-/* ====== FOOTER ====== */
-.dashboard-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 16px 20px;
-  border-radius: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 13px;
-  color: #cccccc;
-}
-
-.footer-status {
-  display: flex;
-  gap: 25px;
-  align-items: center;
-}
-
-.status-indicator {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-  margin-right: 6px;
-}
-
-.status-indicator.status-ontime {
-  background-color: #ffffff;
-}
-
-.status-indicator.status-caution {
-  background-color: #ffcc00;
-}
-
-.status-indicator.status-critical {
-  background-color: #ff3333;
-}
-
-.status-indicator.status-moved {
+.progress-fill.green {
   background-color: #00cc00;
 }
 
-.footer-info {
-  text-align: right;
-  font-size: 13px;
+.progress-fill.yellow {
+  background-color: #ffcc00;
 }
 
-.footer-info p {
-  margin: 0;
-  color: #cccccc;
+.progress-fill.red {
+  background-color: #ff3333;
 }
 
-/* ====== SCROLLBAR STYLING ====== */
+.progress-text {
+  position: absolute;
+  font-size: 9px;
+  font-weight: bold;
+  color: #000000;
+}
+
+/* Warehouse Badge */
+.warehouse-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.warehouse-badge.plant {
+  background-color: #ff8800;
+  color: #ffffff;
+}
+
+.warehouse-badge.external {
+  background-color: #0088ff;
+  color: #ffffff;
+}
+
+/* FOOTER */
+.footer {
+  background-color: #0a0a0a;
+  border-top: 2px solid #00cc00;
+  padding: 8px;
+  font-size: 9px;
+  color: #aaaaaa;
+  overflow-x: auto;
+}
+
+.footer-content {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  white-space: nowrap;
+}
+
+.footer-content span {
+  display: inline-block;
+}
+
+/* ============================================
+   TABLET (481px - 768px)
+   ============================================ */
+
+@media (min-width: 481px) {
+  .app-container {
+    padding: 12px;
+  }
+
+  .header-title h1 {
+    font-size: 22px;
+  }
+
+  .header-title .subtitle {
+    font-size: 13px;
+  }
+
+  .header-timestamp {
+    font-size: 12px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .metric-card {
+    padding: 16px;
+  }
+
+  .metric-label {
+    font-size: 12px;
+  }
+
+  .metric-value {
+    font-size: 32px;
+  }
+
+  .orders-table {
+    font-size: 13px;
+  }
+
+  .orders-table th {
+    font-size: 11px;
+    padding: 12px;
+  }
+
+  .orders-table td {
+    padding: 12px;
+  }
+
+  .status-badge {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .card-row {
+    font-size: 12px;
+    padding: 8px 0;
+  }
+
+  .card-row .label {
+    font-size: 11px;
+  }
+
+  .footer-content {
+    gap: 16px;
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   DESKTOP (769px - 1919px)
+   ============================================ */
+
+@media (min-width: 769px) {
+  .app-container {
+    padding: 16px;
+  }
+
+  .header {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .header-title h1 {
+    font-size: 28px;
+  }
+
+  .header-title .subtitle {
+    font-size: 14px;
+  }
+
+  .header-timestamp {
+    font-size: 13px;
+  }
+
+  .connection-alert {
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .metric-card {
+    padding: 20px;
+  }
+
+  .metric-label {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-size: 40px;
+  }
+
+  .table-container {
+    margin-bottom: 16px;
+  }
+
+  .orders-table {
+    font-size: 14px;
+  }
+
+  .orders-table th {
+    font-size: 12px;
+    padding: 14px;
+  }
+
+  .orders-table td {
+    padding: 14px;
+  }
+
+  .progress-bar {
+    height: 24px;
+  }
+
+  .progress-text {
+    font-size: 10px;
+  }
+
+  .footer {
+    padding: 12px 16px;
+    font-size: 11px;
+  }
+}
+
+/* ============================================
+   TV MONITOR (1920px+)
+   Optimized for viewing from distance
+   ============================================ */
+
+@media (min-width: 1920px) {
+  .app-container {
+    padding: 24px;
+  }
+
+  .header {
+    padding: 24px;
+    margin-bottom: 24px;
+    border-bottom-width: 5px;
+  }
+
+  .header-content {
+    gap: 20px;
+  }
+
+  .header-title h1 {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: 2px;
+  }
+
+  .header-title .subtitle {
+    font-size: 22px;
+    margin-top: 8px;
+  }
+
+  .header-timestamp {
+    font-size: 18px;
+    gap: 10px;
+  }
+
+  .live-indicator {
+    font-size: 24px;
+  }
+
+  .connection-alert {
+    padding: 16px 20px;
+    font-size: 16px;
+    margin-bottom: 24px;
+    border-width: 2px;
+  }
+
+  .alert-icon {
+    font-size: 20px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .metric-card {
+    padding: 32px;
+    border-width: 3px;
+    border-left-width: 6px;
+  }
+
+  .metric-label {
+    font-size: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .metric-value {
+    font-size: 72px;
+    font-weight: 900;
+  }
+
+  .table-container {
+    margin-bottom: 24px;
+  }
+
+  .orders-table {
+    font-size: 16px;
+  }
+
+  .orders-table th {
+    font-size: 14px;
+    padding: 20px;
+    letter-spacing: 1px;
+    border-bottom-width: 3px;
+  }
+
+  .orders-table td {
+    padding: 20px;
+    border-bottom-width: 2px;
+  }
+
+  .orders-table tbody tr {
+    height: 60px;
+  }
+
+  .status-badge {
+    font-size: 13px;
+    padding: 8px 16px;
+    letter-spacing: 1px;
+  }
+
+  .progress-bar {
+    height: 32px;
+  }
+
+  .progress-text {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .warehouse-badge {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .footer {
+    padding: 20px 24px;
+    font-size: 14px;
+    border-top-width: 3px;
+  }
+
+  .footer-content {
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+}
+
+/* ============================================
+   HIDE MOBILE CARDS ON LARGER SCREENS
+   ============================================ */
+
+@media (min-width: 769px) {
+  .mobile-cards {
+    display: none;
+  }
+}
+
+/* ============================================
+   ENSURE TABLE HIDDEN ON MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .orders-table {
+    display: none;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY & PRINT
+   ============================================ */
+
+@media print {
+  .app-container {
+    background-color: white;
+    color: black;
+  }
+
+  .header,
+  .connection-alert,
+  .footer {
+    border-color: black;
+  }
+
+  .metric-card {
+    border-color: black;
+    background-color: white;
+    color: black;
+  }
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
 .table-container::-webkit-scrollbar {
-  width: 8px;
   height: 8px;
+  width: 8px;
 }
 
 .table-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
+  background-color: #1a1a1a;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background-color: #00cc00;
   border-radius: 4px;
 }
 
 .table-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-/* ====== RESPONSIVE DESIGN ====== */
-@media (max-width: 1600px) {
-  .metrics-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .shipping-table {
-    font-size: 13px;
-  }
-  
-  .shipping-table th,
-  .shipping-table td {
-    padding: 12px 10px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .dashboard {
-    padding: 15px;
-    gap: 12px;
-  }
-  
-  .header-title h1 {
-    font-size: 26px;
-  }
-  
-  .metric-value {
-    font-size: 32px;
-  }
-  
-  .shipping-table {
-    font-size: 12px;
-  }
+  background-color: #00ff00;
 }
