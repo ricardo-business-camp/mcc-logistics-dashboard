@@ -33,7 +33,7 @@ body {
 .header {
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
   border-bottom: 3px solid #00cc00;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   padding: 12px;
   border-radius: 4px;
   flex-shrink: 0;
@@ -86,7 +86,7 @@ body {
   border: 1px solid #ff3333;
   color: #ffffff;
   padding: 8px 12px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -104,7 +104,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   flex-shrink: 0;
 }
 
@@ -150,7 +150,7 @@ body {
   flex: 1;
   overflow-x: auto;
   overflow-y: auto;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   background-color: #1a1a1a;
   border-radius: 4px;
   width: 100%;
@@ -200,29 +200,36 @@ body {
   background-color: #2a2a2a;
 }
 
-/* Row Status Colors */
+/* Row Status Colors - FIXED FLASHING */
 .orders-table .row-late,
 .orders-table .row-critical {
   border-left: 3px solid #ff3333;
-  background-color: #2a1a1a;
+  animation: flashLate 0.8s infinite;
+}
+
+@keyframes flashLate {
+  0%, 100% { background-color: #2a1a1a; }
+  50% { background-color: #5a2a2a; }
 }
 
 .orders-table .row-ontime {
   border-left: 3px solid #00cc00;
+  background-color: #1a2a1a;
 }
 
 .orders-table .row-caution {
   border-left: 3px solid #ffcc00;
-  animation: flashCaution 1.5s infinite;
+  animation: flashCaution 1s infinite;
 }
 
 @keyframes flashCaution {
-  0%, 100% { background-color: #2a2a1a; }
-  50% { background-color: #3a3a2a; }
+  0%, 100% { background-color: #3a3a1a; }
+  50% { background-color: #5a5a2a; }
 }
 
 .orders-table .row-moved {
   border-left: 4px solid #00cc00;
+  background-color: #1a2a1a;
 }
 
 .status-cell {
@@ -251,6 +258,7 @@ body {
 .status-badge.critical {
   background-color: #ff3333;
   color: #ffffff;
+  animation: flashBadgeLate 0.8s infinite;
 }
 
 .status-badge.ontime {
@@ -261,7 +269,7 @@ body {
 .status-badge.caution {
   background-color: #ffcc00;
   color: #000000;
-  animation: flashBadge 1.5s infinite;
+  animation: flashBadgeCaution 1s infinite;
 }
 
 .status-badge.moved {
@@ -269,12 +277,17 @@ body {
   color: #000000;
 }
 
-@keyframes flashBadge {
+@keyframes flashBadgeLate {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes flashBadgeCaution {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
 }
 
-/* Progress Bar - FIXED COLORS */
+/* Progress Bar */
 .progress-bar {
   position: relative;
   width: 100%;
