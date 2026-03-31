@@ -3,6 +3,7 @@ import './App.css';
 
 function App() {
   const [time, setTime] = useState(new Date());
+  const [refreshCounter, setRefreshCounter] = useState(0);
   const [metrics, setMetrics] = useState({
     linesToday: 285,
     ontimePercent: 82,
@@ -10,30 +11,35 @@ function App() {
     nextCutoff: '2:00 PM'
   });
 
+  // UPDATE TIME EVERY SECOND
   useEffect(() => {
-    const interval = setInterval(() => setTime(new Date()), 1000);
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  // AUTO-REFRESH METRICS EVERY 30 SECONDS
+  // REFRESH METRICS EVERY 30 SECONDS AND CHANGE NUMBERS
   useEffect(() => {
     const refreshInterval = setInterval(() => {
+      setRefreshCounter(prev => prev + 1);
       setMetrics({
-        linesToday: Math.floor(Math.random() * (300 - 250) + 250),
+        linesToday: Math.floor(Math.random() * (320 - 260) + 260),
         ontimePercent: Math.floor(Math.random() * (95 - 75) + 75),
-        atRisk: Math.floor(Math.random() * (12 - 3) + 3),
+        atRisk: Math.floor(Math.random() * (15 - 2) + 2),
         nextCutoff: '2:00 PM'
       });
     }, 30000);
+    
     return () => clearInterval(refreshInterval);
   }, []);
 
   const getStatusClass = (status) => {
-    const statusMap = { 
-      'LATE': 'status-late', 
-      'CAUTION': 'status-caution', 
-      'ON-TIME': 'status-ontime', 
-      'MOVED': 'status-moved' 
+    const statusMap = {
+      'LATE': 'status-late',
+      'CAUTION': 'status-caution',
+      'ON-TIME': 'status-ontime',
+      'MOVED': 'status-moved'
     };
     return statusMap[status] || '';
   };
