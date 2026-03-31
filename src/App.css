@@ -4,467 +4,319 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html, body, #root {
+  width: 100%;
+  height: 100%;
   background-color: #1a1a1a;
-  color: #ffffff;
+  color: #fff;
+  font-family: Arial, sans-serif;
 }
 
 .dashboard {
+  background-color: #1a1a1a;
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background: #1a1a1a;
-  overflow: hidden;
-  padding: 20px;
-  gap: 15px;
+  overflow-x: hidden;
 }
 
-/* ====== HEADER ====== */
 .dashboard-header {
+  padding: 20px;
+  border-bottom: 3px solid #00cc00;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 20px;
-  border-radius: 8px;
-  border-left: 4px solid #00cc00;
-  backdrop-filter: blur(10px);
-}
-
-.header-title h1 {
-  font-size: 32px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 1px;
-  margin-bottom: 5px;
-}
-
-.header-title p {
-  font-size: 16px;
-  color: #cccccc;
-}
-
-.header-refresh {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  color: #cccccc;
-}
-
-.pulse-indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #00cc00;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(0, 204, 0, 0.7);
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 0 10px rgba(0, 204, 0, 0);
-  }
-}
-
-/* ====== METRICS CONTAINER ====== */
-.metrics-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  flex-wrap: wrap;
   gap: 15px;
 }
 
-.metric-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 25px;
-  border-radius: 8px;
-  text-align: center;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  border-left: 3px solid #00cc00;
+.dashboard-header h1 {
+  font-size: 32px;
+  color: #00cc00;
+  font-weight: bold;
 }
 
-.metric-card:hover {
-  background: rgba(255, 255, 255, 0.12);
+.header-info {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.date {
+  font-size: 12px;
+  color: #00cc00;
+}
+
+.status {
+  font-size: 11px;
+  background-color: #006600;
+  color: #00cc00;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+.metrics-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+}
+
+.metric-card {
+  background-color: #2a2a2a;
+  border-left: 5px solid #00cc00;
+  padding: 20px;
+  text-align: center;
 }
 
 .metric-label {
-  font-size: 14px;
+  font-size: 11px;
+  color: #888;
   text-transform: uppercase;
-  color: #999999;
   margin-bottom: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
 }
 
 .metric-value {
-  font-size: 42px;
-  font-weight: 700;
+  font-size: 40px;
   color: #00cc00;
-  line-height: 1;
+  font-weight: bold;
 }
 
-.metric-value.at-risk {
-  color: #ff3333;
-}
-
-/* ====== TABLE CONTAINER ====== */
-.table-container {
+.table-section {
   flex: 1;
-  overflow: auto;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
+  padding: 20px;
+  overflow-x: auto;
 }
 
 .shipping-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
 }
 
 .shipping-table thead {
+  background-color: #2a2a2a;
   position: sticky;
   top: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 10;
 }
 
 .shipping-table th {
-  padding: 16px 14px;
+  padding: 12px;
   text-align: left;
-  font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
-  font-size: 13px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-  letter-spacing: 0.5px;
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.shipping-table tbody tr {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
-}
-
-.shipping-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+  color: #00cc00;
+  border-bottom: 2px solid #00cc00;
+  white-space: nowrap;
 }
 
 .shipping-table td {
-  padding: 14px;
-  vertical-align: middle;
-  color: #ffffff;
+  padding: 12px;
+  font-size: 12px;
+  border-bottom: 1px solid #333;
 }
 
-/* ====== ROW STATUS COLORS - MCC PROPOSAL ====== */
-.order-row.status-ontime {
-  background: rgba(255, 255, 255, 0.02);
-  border-left: 4px solid #ffffff;
+.status-late {
+  animation: flashLate 0.8s infinite;
 }
 
-.order-row.status-ontime td {
-  color: #ffffff;
+.status-caution {
+  animation: flashCaution 1s infinite;
 }
 
-/* CAUTION - Yellow/Amber (<1 hour from cut-off) */
-.order-row.status-caution {
-  background: rgba(255, 193, 7, 0.15);
-  border-left: 4px solid #ffcc00;
-  animation: cautionFlash 2s infinite;
+.status-ontime {
+  background-color: rgba(0, 200, 0, 0.1);
 }
 
-.order-row.status-caution td {
-  color: #ffff99;
-  font-weight: 500;
+.status-moved {
+  background-color: rgba(100, 100, 100, 0.1);
 }
 
-@keyframes cautionFlash {
-  0%, 100% {
-    background: rgba(255, 193, 7, 0.15);
-  }
-  50% {
-    background: rgba(255, 193, 7, 0.25);
-  }
+@keyframes flashLate {
+  0%, 100% { background-color: #5a2a2a; }
+  50% { background-color: #ff3333; }
 }
 
-/* CRITICAL - Flashing Red (past cut-off) */
-.order-row.status-critical {
-  background: rgba(255, 51, 51, 0.2);
-  border-left: 4px solid #ff3333;
-  animation: criticalFlash 0.8s infinite;
-  font-weight: 600;
+@keyframes flashCaution {
+  0%, 100% { background-color: #5a5a2a; }
+  50% { background-color: #ffcc00; }
 }
 
-.order-row.status-critical td {
-  color: #ffcccc;
+@keyframes flashBadge {
+  0%, 100% { background-color: #ffcc00; color: #000; }
+  50% { background-color: #ff9900; color: #fff; }
 }
 
-@keyframes criticalFlash {
-  0%, 100% {
-    background: rgba(255, 51, 51, 0.2);
-  }
-  50% {
-    background: rgba(255, 51, 51, 0.35);
-  }
-}
-
-/* MOVED - Green (shipped/complete) */
-.order-row.status-moved {
-  background: rgba(0, 204, 0, 0.1);
-  border-left: 4px solid #00cc00;
-}
-
-.order-row.status-moved td {
-  color: #99ff99;
-  font-weight: 500;
-}
-
-/* ====== STATUS BADGE ====== */
 .status-badge {
   display: inline-block;
-  padding: 8px 14px;
-  border-radius: 4px;
-  font-weight: 700;
-  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-.status-ontime .status-badge {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+.status-late .status-badge {
+  background-color: #ff3333;
+  color: #fff;
 }
 
 .status-caution .status-badge {
-  background: rgba(255, 193, 7, 0.3);
-  color: #ffff99;
-  border: 1px solid rgba(255, 193, 7, 0.6);
+  animation: flashBadge 1s infinite;
 }
 
-.status-critical .status-badge {
-  background: rgba(255, 51, 51, 0.3);
-  color: #ffcccc;
-  border: 1px solid rgba(255, 51, 51, 0.6);
+.status-ontime .status-badge {
+  background-color: #00cc00;
+  color: #000;
 }
 
 .status-moved .status-badge {
-  background: rgba(0, 204, 0, 0.3);
-  color: #99ff99;
-  border: 1px solid rgba(0, 204, 0, 0.6);
+  background-color: #666;
+  color: #fff;
 }
 
-/* ====== TABLE CELL STYLES ====== */
-.status-cell {
-  font-weight: 700;
-}
-
-.city-cell {
-  font-weight: 700;
-  color: #ffff99;
-}
-
-.delivery-cell {
-  font-family: 'Courier New', monospace;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.job-cell {
-  font-family: 'Courier New', monospace;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.production-cell {
-  font-weight: 500;
-  color: #cccccc;
-}
-
-.time-remaining {
-  font-weight: 700;
-  color: #ffff99;
-}
-
-.time-status {
-  color: #999999;
-  font-size: 13px;
-}
-
-.number-cell {
-  text-align: right;
-  font-family: 'Courier New', monospace;
-  color: #cccccc;
-}
-
-.truck-cell {
-  font-weight: 700;
-  color: #99ff99;
-  text-transform: uppercase;
-  font-size: 12px;
-}
-
-/* ====== PROGRESS BAR ====== */
 .progress-bar {
-  position: relative;
   width: 100%;
-  height: 28px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 4px;
+  height: 18px;
+  background-color: #333;
+  border-radius: 2px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 4px;
 }
 
 .progress-fill {
   height: 100%;
-  transition: width 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 12px;
-  color: #000000;
+  background-color: #00cc00;
 }
 
-.progress-fill.ready {
-  background: linear-gradient(90deg, rgba(0, 204, 0, 0.8), rgba(0, 204, 0, 1));
+.progress-fill.green {
+  background-color: #00cc00;
 }
 
-.progress-fill.not-ready {
-  background: linear-gradient(90deg, rgba(255, 193, 7, 0.7), rgba(255, 193, 7, 0.9));
-}
-
-.percentage-text {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 12px;
-  color: #000000;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-/* ====== FOOTER ====== */
 .dashboard-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 16px 20px;
-  border-radius: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 13px;
-  color: #cccccc;
+  background-color: #1a1a1a;
+  border-top: 3px solid #00cc00;
+  padding: 12px 20px;
+  width: 100%;
 }
 
 .footer-status {
   display: flex;
-  gap: 25px;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
-.status-indicator {
+.status-item {
   display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-  margin-right: 6px;
-}
-
-.status-indicator.status-ontime {
-  background-color: #ffffff;
-}
-
-.status-indicator.status-caution {
-  background-color: #ffcc00;
-}
-
-.status-indicator.status-critical {
-  background-color: #ff3333;
-}
-
-.status-indicator.status-moved {
-  background-color: #00cc00;
-}
-
-.footer-info {
-  text-align: right;
-  font-size: 13px;
-}
-
-.footer-info p {
-  margin: 0;
-  color: #cccccc;
-}
-
-/* ====== SCROLLBAR STYLING ====== */
-.table-container::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.table-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  color: #00cc00;
+  background-color: #2a2a2a;
+  padding: 8px 12px;
+  border-left: 3px solid #00cc00;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
-.table-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-/* ====== RESPONSIVE DESIGN ====== */
-@media (max-width: 1600px) {
-  .metrics-container {
+@media (max-width: 1199px) {
+  .metrics-section {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  .shipping-table {
-    font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
+
+  .dashboard-header h1 {
+    font-size: 18px;
+  }
+
+  .metrics-section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .metric-card {
+    padding: 12px;
+  }
+
+  .metric-value {
+    font-size: 24px;
+  }
+
+  .table-section {
+    padding: 15px;
+  }
+
   .shipping-table th,
   .shipping-table td {
-    padding: 12px 10px;
+    padding: 8px;
+    font-size: 10px;
+  }
+
+  .dashboard-footer {
+    padding: 10px 15px;
+  }
+
+  .status-item {
+    font-size: 10px;
+    padding: 6px 8px;
   }
 }
 
-@media (max-width: 1200px) {
-  .dashboard {
-    padding: 15px;
-    gap: 12px;
+@media (max-width: 480px) {
+  .dashboard-header {
+    padding: 10px;
   }
-  
-  .header-title h1 {
-    font-size: 26px;
-  }
-  
-  .metric-value {
-    font-size: 32px;
-  }
-  
-  .shipping-table {
+
+  .dashboard-header h1 {
     font-size: 12px;
+  }
+
+  .metrics-section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .metric-card {
+    padding: 8px;
+  }
+
+  .metric-value {
+    font-size: 18px;
+  }
+
+  .metric-label {
+    font-size: 8px;
+  }
+
+  .table-section {
+    padding: 10px;
+  }
+
+  .shipping-table th,
+  .shipping-table td {
+    padding: 6px;
+    font-size: 9px;
+  }
+
+  .dashboard-footer {
+    padding: 8px 10px;
+  }
+
+  .footer-status {
+    gap: 6px;
+    overflow-x: auto;
+  }
+
+  .status-item {
+    font-size: 8px;
+    padding: 4px 6px;
+    flex-shrink: 0;
   }
 }
