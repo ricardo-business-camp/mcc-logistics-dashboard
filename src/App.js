@@ -182,7 +182,7 @@ function App() {
           </div>
           <div className="header-timestamp">
             <span className="live-indicator">●</span>
-            <span>Last Updated: {lastUpdated.toLocaleTimeString()}</span>
+            <span>Date: {lastUpdated.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' })} | Last Updated: {lastUpdated.toLocaleTimeString()}</span>
           </div>
         </div>
       </div>
