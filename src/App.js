@@ -3,7 +3,6 @@ import './App.css';
 
 function App() {
   const [time, setTime] = useState(new Date());
-  const [refreshCounter, setRefreshCounter] = useState(0);
   const [metrics, setMetrics] = useState({
     linesToday: 285,
     ontimePercent: 82,
@@ -11,7 +10,6 @@ function App() {
     nextCutoff: '2:00 PM'
   });
 
-  // UPDATE TIME EVERY SECOND
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date());
@@ -19,29 +17,24 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // REFRESH METRICS EVERY 30 SECONDS AND CHANGE NUMBERS
   useEffect(() => {
     const refreshInterval = setInterval(() => {
-      setRefreshCounter(prev => prev + 1);
       setMetrics({
-        linesToday: Math.floor(Math.random() * (320 - 260) + 260),
-        ontimePercent: Math.floor(Math.random() * (95 - 75) + 75),
-        atRisk: Math.floor(Math.random() * (15 - 2) + 2),
+        linesToday: Math.floor(Math.random() * 50) + 260,
+        ontimePercent: Math.floor(Math.random() * 20) + 75,
+        atRisk: Math.floor(Math.random() * 10) + 2,
         nextCutoff: '2:00 PM'
       });
     }, 30000);
-    
     return () => clearInterval(refreshInterval);
   }, []);
 
   const getStatusClass = (status) => {
-    const statusMap = {
-      'LATE': 'status-late',
-      'CAUTION': 'status-caution',
-      'ON-TIME': 'status-ontime',
-      'MOVED': 'status-moved'
-    };
-    return statusMap[status] || '';
+    if (status === 'LATE') return 'status-late';
+    if (status === 'CAUTION') return 'status-caution';
+    if (status === 'ON-TIME') return 'status-ontime';
+    if (status === 'MOVED') return 'status-moved';
+    return '';
   };
 
   const orders = [
@@ -55,16 +48,16 @@ function App() {
     { status: 'ON-TIME', cutoff: '5:30 PM', timeLeft: '5 hrs 40 mins', city: 'CHICAGO', delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD', production: 'CUTTING', timeInStatus: '1:05', receipted: 0, orderQty: '150,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' }
   ];
 
-  const dateStr = `${String(time.getMonth() + 1).padStart(2, '0')}/${String(time.getDate()).padStart(2, '0')}/${String(time.getFullYear()).slice(-2)}`;
-  const timeStr = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')}`;
+  const dateStr = String(time.getMonth() + 1).padStart(2, '0') + '/' + String(time.getDate()).padStart(2, '0') + '/' + String(time.getFullYear()).slice(-2);
+  const timeStr = String(time.getHours()).padStart(2, '0') + ':' + String(time.getMinutes()).padStart(2, '0') + ':' + String(time.getSeconds()).padStart(2, '0');
 
   return (
     <div className="dashboard">
       <div className="dashboard-header">
         <h1>MCC LOGISTICS COMMAND CENTRE</h1>
         <div className="header-info">
-          <span className="date">📅 Date: {dateStr} | Last Updated: {timeStr}</span>
-          <span className="status">⚠️ Connection Note: Failed to fetch - Using mock data for demonstration</span>
+          <span className="date">Date: {dateStr} | Time: {timeStr}</span>
+          <span className="status">Connection Note: Using mock data</span>
         </div>
       </div>
 
@@ -95,51 +88,53 @@ function App() {
               <th>CUT-OFF</th>
               <th>TIME LEFT</th>
               <th>CITY</th>
-              <th>DELIVERY #</th>
-              <th>JOB #</th>
+              <th>DELIVERY</th>
+              <th>JOB</th>
               <th>PRODUCT</th>
               <th>PRODUCTION</th>
-              <th>TIME IN STATUS</th>
+              <th>TIME</th>
               <th>RECEIPTED</th>
               <th>ORDER QTY</th>
-              <th>% READY</th>
+              <th>READY</th>
               <th>TRUCK</th>
               <th>WAREHOUSE</th>
             </tr>
           </thead>
           <tbody>
-            {orders.map((order, idx) => (
-              <tr key={idx} className={getStatusClass(order.status)}>
-                <td><span className="status-badge">{order.status}</span></td>
-                <td>{order.cutoff}</td>
-                <td>{order.timeLeft}</td>
-                <td>{order.city}</td>
-                <td>{order.delivery}</td>
-                <td>{order.job}</td>
-                <td>{order.product}</td>
-                <td>{order.production}</td>
-                <td>{order.timeInStatus}</td>
-                <td>{order.receipted}</td>
-                <td>{order.orderQty}</td>
-                <td><div className="progress-bar"><div className="progress-fill green" style={{width: order.orderStatus === 'READY' ? '100%' : '45%'}}></div></div>{order.orderStatus}</td>
-                <td>{order.truck}</td>
-                <td>{order.warehouse}</td>
-              </tr>
-            ))}
+            {orders.map(function(order, idx) {
+              return (
+                <tr key={idx} className={getStatusClass(order.status)}>
+                  <td><span className="status-badge">{order.status}</span></td>
+                  <td>{order.cutoff}</td>
+                  <td>{order.timeLeft}</td>
+                  <td>{order.city}</td>
+                  <td>{order.delivery}</td>
+                  <td>{order.job}</td>
+                  <td>{order.product}</td>
+                  <td>{order.production}</td>
+                  <td>{order.timeInStatus}</td>
+                  <td>{order.receipted}</td>
+                  <td>{order.orderQty}</td>
+                  <td><div className="progress-bar"><div className="progress-fill green" style={{width: '45%'}}></div></div></td>
+                  <td>{order.truck}</td>
+                  <td>{order.warehouse}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
       <div className="dashboard-footer">
         <div className="footer-status">
-          <span className="status-item on-time">✓ On Time</span>
-          <span className="status-item caution">⚠ Caution (1hr)</span>
-          <span className="status-item critical">🔴 Critical (Late)</span>
-          <span className="status-item moved">↻ Moved</span>
-          <span className="status-item webhook">🔗 n8n Webhook Connected</span>
-          <span className="status-item warehouse">🏭 Warehouse Tracking Active</span>
-          <span className="status-item refresh">🔄 Auto-Refresh Every 30 Seconds</span>
-          <span className="status-item external">🚚 External Warehouse Visibility</span>
+          <span className="status-item">On Time</span>
+          <span className="status-item">Caution (1hr)</span>
+          <span className="status-item">Critical (Late)</span>
+          <span className="status-item">Moved</span>
+          <span className="status-item">n8n Webhook Connected</span>
+          <span className="status-item">Warehouse Tracking Active</span>
+          <span className="status-item">Auto-Refresh Every 30 Seconds</span>
+          <span className="status-item">External Warehouse Visibility</span>
         </div>
       </div>
     </div>
