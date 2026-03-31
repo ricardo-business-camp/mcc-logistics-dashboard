@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+const WEBHOOK_URL = 'https://rickie92.app.n8n.cloud/webhook/2fcdbd6-24d5-4982-babc-685ca7e7f3cb';
+
 function App() {
   const [metrics, setMetrics] = useState({
-    linestoday: 285,
+    linesToday: 285,
     ontimePercent: 82,
-    atrisk: 7,
-    nextcutoff: '2:00 PM'
+    atRisk: 7,
+    nextCutoff: '2:00 PM'
   });
 
   const [orders, setOrders] = useState([
@@ -19,10 +21,10 @@ function App() {
       job: '4001234',
       product: 'LABEL ROLL 8.5x11',
       production: 'CUTTING',
-      timeinStatus: '6:45',
+      timeInStatus: '6:45',
       receipted: 0,
-      orderQty: 1500000,
-      percentReady: 0,
+      orderQty: '1,500,000',
+      orderStatus: 'NOT READY',
       truck: 'SHUTTLE-Q3',
       warehouse: 'MCC PLANT'
     },
@@ -35,10 +37,10 @@ function App() {
       job: '4004321',
       product: 'CARDSTOCK 10x12',
       production: 'JOGGED',
-      timeinStatus: '3:22',
-      receipted: 100000,
-      orderQty: 95000,
-      percentReady: 95,
+      timeInStatus: '3:22',
+      receipted: '100,000',
+      orderQty: '95,000',
+      orderStatus: 'READY',
       truck: 'SHUTTLE-Q1',
       warehouse: 'EXTERNAL'
     },
@@ -51,10 +53,10 @@ function App() {
       job: '4004213',
       product: 'ENVELOPE PACK',
       production: 'PRINTED',
-      timeinStatus: '1:10',
-      receipted: 414995,
-      orderQty: 1200000,
-      percentReady: 85,
+      timeInStatus: '1:10',
+      receipted: 0,
+      orderQty: '1,200,000',
+      orderStatus: 'NOT READY',
       truck: 'SHUTTLE-Q2',
       warehouse: 'EXTERNAL'
     },
@@ -67,10 +69,10 @@ function App() {
       job: '4005126',
       product: 'BUSINESS CARDS',
       production: 'CUTTING',
-      timeinStatus: '0:35',
+      timeInStatus: '0:35',
       receipted: 0,
-      orderQty: 30000,
-      percentReady: 25,
+      orderQty: '30,000',
+      orderStatus: 'NOT READY',
       truck: 'SHUTTLE-Q3',
       warehouse: 'MCC PLANT'
     },
@@ -83,10 +85,10 @@ function App() {
       job: '4006589',
       product: 'POCKET FOLDER',
       production: 'CREOPLATE',
-      timeinStatus: '8:15',
+      timeInStatus: '8:15',
       receipted: 0,
-      orderQty: 300000,
-      percentReady: 100,
+      orderQty: '300,000',
+      orderStatus: 'NOT READY',
       truck: 'SHIPPED',
       warehouse: 'MCC PLANT'
     },
@@ -99,10 +101,10 @@ function App() {
       job: '4003456',
       product: 'FLYERS 8.5x11',
       production: 'PRINTING',
-      timeinStatus: '2:45',
-      receipted: 50000,
-      orderQty: 500000,
-      percentReady: 72,
+      timeInStatus: '2:45',
+      receipted: '50,000',
+      orderQty: '500,000',
+      orderStatus: 'NOT READY',
       truck: 'SHUTTLE-Q1',
       warehouse: 'MCC PLANT'
     },
@@ -115,10 +117,10 @@ function App() {
       job: '4002987',
       product: 'POSTCARDS 5x7',
       production: 'JOGGED',
-      timeinStatus: '4:20',
-      receipted: 125000,
-      orderQty: 250000,
-      percentReady: 60,
+      timeInStatus: '4:20',
+      receipted: '125,000',
+      orderQty: '250,000',
+      orderStatus: 'NOT READY',
       truck: 'SHUTTLE-Q2',
       warehouse: 'EXTERNAL'
     },
@@ -131,88 +133,90 @@ function App() {
       job: '4007654',
       product: 'BROCHURES TRI-FOLD',
       production: 'CUTTING',
-      timeinStatus: '1:05',
+      timeInStatus: '1:05',
       receipted: 0,
-      orderQty: 150000,
-      percentReady: 40,
+      orderQty: '150,000',
+      orderStatus: 'NOT READY',
       truck: 'SHUTTLE-Q3',
       warehouse: 'MCC PLANT'
     }
   ]);
 
-  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMetrics(prev => ({
-        linestoday: Math.floor(Math.random() * 15) + 280,
-        ontimePercent: Math.floor(Math.random() * 17) + 75,
-        atrisk: Math.floor(Math.random() * 7) + 5,
-        nextcutoff: prev.nextcutoff
-      }));
-
-      setOrders(prev => prev.map(order => ({
-        ...order,
-        receipted: Math.floor(order.receipted + Math.random() * 10000)
-      })));
-
-      setLastUpdated(new Date());
+      fetch(WEBHOOK_URL)
+        .then(res => res.json())
+        .catch(() => {
+          // Webhook call failed, using mock data
+        });
     }, 30000);
-
     return () => clearInterval(interval);
   }, []);
 
   const getStatusClass = (status) => {
-    return status.toLowerCase().replace('-', '');
+    switch(status) {
+      case 'LATE': return 'status-late';
+      case 'CAUTION': return 'status-caution';
+      case 'ON-TIME': return 'status-ontime';
+      case 'MOVED': return 'status-moved';
+      default: return '';
+    }
   };
 
-  const getReadyColor = (percent) => {
-    if (percent >= 90) return 'green';
-    if (percent >= 50) return 'yellow';
-    return 'red';
+  const formatDate = () => {
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const year = String(currentDate.getFullYear()).slice(-2);
+    return `${month}/${day}/${year}`;
+  };
+
+  const formatTime = () => {
+    const hours = String(currentDate.getHours()).padStart(2, '0');
+    const mins = String(currentDate.getMinutes()).padStart(2, '0');
+    const secs = String(currentDate.getSeconds()).padStart(2, '0');
+    return `${hours}:${mins}:${secs}`;
   };
 
   return (
-    <div className="app-container">
-      <div className="header">
-        <div className="header-content">
-          <div className="header-title">
-            <h1>MCC LOGISTICS COMMAND CENTRE</h1>
-            <p className="subtitle">Real-Time Shipping Operations Dashboard</p>
-          </div>
-          <div className="header-timestamp">
-            <span className="live-indicator">●</span>
-            <span>Date: {lastUpdated.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' })} | Last Updated: {lastUpdated.toLocaleTimeString()}</span>
-          </div>
+    <div className="dashboard">
+      <div className="dashboard-header">
+        <h1>MCC LOGISTICS COMMAND CENTRE</h1>
+        <div className="header-info">
+          <span className="date">📅 Date: {formatDate()} | Last Updated: {formatTime()}</span>
+          <span className="status">⚠️ Connection Note: Failed to fetch - Using mock data for demonstration</span>
         </div>
       </div>
 
-      <div className="connection-alert">
-        <span className="alert-icon">⚠</span>
-        <span className="alert-text">Connection Note: Failed to fetch - Using mock data for demonstration</span>
-      </div>
-
-      <div className="metrics-grid">
+      <div className="metrics-section">
         <div className="metric-card">
           <div className="metric-label">LINES TODAY</div>
-          <div className="metric-value">{metrics.linestoday}</div>
+          <div className="metric-value">{metrics.linesToday}</div>
         </div>
         <div className="metric-card">
           <div className="metric-label">ON-TIME %</div>
           <div className="metric-value">{metrics.ontimePercent}%</div>
         </div>
-        <div className="metric-card at-risk">
+        <div className="metric-card">
           <div className="metric-label">AT RISK</div>
-          <div className="metric-value">{metrics.atrisk}</div>
+          <div className="metric-value">{metrics.atRisk}</div>
         </div>
         <div className="metric-card">
           <div className="metric-label">NEXT CUT-OFF</div>
-          <div className="metric-value">{metrics.nextcutoff}</div>
+          <div className="metric-value">{metrics.nextCutoff}</div>
         </div>
       </div>
 
-      <div className="table-container">
-        <table className="orders-table">
+      <div className="table-section">
+        <table className="shipping-table">
           <thead>
             <tr>
               <th>STATUS</th>
@@ -233,51 +237,33 @@ function App() {
           </thead>
           <tbody>
             {orders.map((order, idx) => (
-              <tr key={idx} className={`row-${getStatusClass(order.status)} ${order.status === 'MOVED' ? 'row-moved' : ''}`}>
-                <td className="status-cell">
-                  <span className={`status-badge ${getStatusClass(order.status)}`}>
-                    {order.status}
-                  </span>
-                </td>
+              <tr key={idx} className={getStatusClass(order.status)}>
+                <td><span className="status-badge">{order.status}</span></td>
                 <td>{order.cutoff}</td>
-                <td className={order.timeLeft.includes('-') ? 'text-warning' : ''}>{order.timeLeft}</td>
+                <td>{order.timeLeft}</td>
                 <td>{order.city}</td>
                 <td>{order.delivery}</td>
                 <td>{order.job}</td>
                 <td>{order.product}</td>
                 <td>{order.production}</td>
-                <td>{order.timeinStatus}</td>
-                <td>{order.receipted.toLocaleString()}</td>
-                <td>{order.orderQty.toLocaleString()}</td>
-                <td className={`ready-${getReadyColor(order.percentReady)}`}>
+                <td>{order.timeInStatus}</td>
+                <td>{order.receipted}</td>
+                <td>{order.orderQty}</td>
+                <td>
                   <div className="progress-bar">
-                    <div className={`progress-fill ${getReadyColor(order.percentReady)}`} style={{width: `${order.percentReady}%`}}></div>
-                    <span className="progress-text">{order.percentReady}%</span>
+                    <div 
+                      className="progress-fill green" 
+                      style={{width: order.orderStatus === 'READY' ? '100%' : '45%'}}
+                    ></div>
                   </div>
+                  {order.orderStatus}
                 </td>
                 <td>{order.truck}</td>
-                <td>
-                  <span className={`warehouse-badge ${order.warehouse === 'MCC PLANT' ? 'plant' : 'external'}`}>
-                    {order.warehouse === 'MCC PLANT' ? '🏭' : '🚚'} {order.warehouse}
-                  </span>
-                </td>
+                <td>{order.warehouse}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
-
-      <div className="footer">
-        <div className="footer-content">
-          <span>🟢 On Time</span>
-          <span>🟡 Caution (1hr)</span>
-          <span>🔴 Critical (Late)</span>
-          <span>🟢 Moved</span>
-          <span>🚀 n8n Webhook Connected</span>
-          <span>📊 Auto-Refresh Every 30 Seconds</span>
-          <span>🏭 Warehouse Tracking Active</span>
-          <span>🚚 External Warehouse Visibility</span>
-        </div>
       </div>
     </div>
   );
