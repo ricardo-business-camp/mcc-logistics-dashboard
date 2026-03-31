@@ -236,3 +236,146 @@ body {
   font-size: 10px;
   color: #888;
 }
+/* DASHBOARD FOOTER */
+.dashboard-footer {
+  background-color: #1a1a1a;
+  border-top: 3px solid #00cc00;
+  padding: 15px 20px;
+  margin-top: auto;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #888;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: #2a2a2a;
+  transition: all 0.3s ease;
+}
+
+.status-item.on-time {
+  color: #00cc00;
+  border-left: 3px solid #00cc00;
+}
+
+.status-item.caution {
+  color: #ffcc00;
+  border-left: 3px solid #ffcc00;
+}
+
+.status-item.critical {
+  color: #ff3333;
+  border-left: 3px solid #ff3333;
+  animation: pulse 1s infinite;
+}
+
+.status-item.moved {
+  color: #888;
+  border-left: 3px solid #666;
+}
+
+.status-item.webhook {
+  color: #00cc00;
+  border-left: 3px solid #00cc00;
+}
+
+.status-item.warehouse {
+  color: #00cc00;
+  border-left: 3px solid #00cc00;
+}
+
+.status-item.refresh {
+  color: #00cc00;
+  border-left: 3px solid #00cc00;
+  animation: spin 2s linear infinite;
+}
+
+.status-item.external {
+  color: #00cc00;
+  border-left: 3px solid #00cc00;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* RESPONSIVE FOOTER */
+@media (max-width: 1024px) {
+  .footer-status {
+    gap: 10px;
+  }
+
+  .status-item {
+    font-size: 11px;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-footer {
+    padding: 10px 15px;
+  }
+
+  .footer-status {
+    gap: 8px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .status-item {
+    font-size: 10px;
+    padding: 5px 8px;
+    gap: 5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-footer {
+    padding: 8px 10px;
+  }
+
+  .footer-status {
+    gap: 6px;
+  }
+
+  .status-item {
+    font-size: 9px;
+    padding: 4px 6px;
+    gap: 4px;
+  }
+}
