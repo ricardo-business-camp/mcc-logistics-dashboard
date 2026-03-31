@@ -19,6 +19,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  padding-bottom: 0;
 }
 
 .dashboard-header {
@@ -198,6 +199,7 @@ html, body, #root {
   border-top: 3px solid #00cc00;
   padding: 12px 20px;
   width: 100%;
+  margin-bottom: 0;
 }
 
 .footer-status {
@@ -320,3 +322,4 @@ html, body, #root {
     flex-shrink: 0;
   }
 }
+
