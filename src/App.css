@@ -4,13 +4,12 @@
   box-sizing: border-box;
 }
 
-html, body {
+html, body, #root {
   width: 100%;
   height: 100%;
   background-color: #1a1a1a;
-  color: #ffffff;
-  font-family: 'Arial', sans-serif;
-  overflow-x: hidden;
+  color: #fff;
+  font-family: Arial, sans-serif;
 }
 
 .dashboard {
@@ -19,64 +18,50 @@ html, body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0;
   overflow-x: hidden;
 }
 
-/* HEADER */
 .dashboard-header {
+  padding: 20px;
+  border-bottom: 3px solid #00cc00;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-bottom: 3px solid #00cc00;
-  gap: 20px;
   flex-wrap: wrap;
-  width: 100%;
-  box-sizing: border-box;
+  gap: 15px;
 }
 
 .dashboard-header h1 {
   font-size: 32px;
-  font-weight: bold;
   color: #00cc00;
-  letter-spacing: 2px;
-  flex: 1;
-  min-width: 250px;
+  font-weight: bold;
 }
 
 .header-info {
   display: flex;
   gap: 15px;
-  align-items: center;
   flex-wrap: wrap;
 }
 
 .date {
   font-size: 12px;
   color: #00cc00;
-  font-weight: bold;
 }
 
 .status {
   font-size: 11px;
-  padding: 4px 8px;
-  border-radius: 3px;
-  font-weight: bold;
   background-color: #006600;
   color: #00cc00;
+  padding: 4px 8px;
+  border-radius: 3px;
 }
 
-/* METRICS SECTION */
 .metrics-section {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  padding: 0 20px;
-  margin-bottom: 20px;
+  padding: 20px;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .metric-card {
@@ -84,46 +69,36 @@ html, body {
   border-left: 5px solid #00cc00;
   padding: 20px;
   text-align: center;
-  border-radius: 4px;
 }
 
 .metric-label {
   font-size: 11px;
   color: #888;
   text-transform: uppercase;
-  letter-spacing: 1px;
   margin-bottom: 10px;
 }
 
 .metric-value {
   font-size: 40px;
-  font-weight: bold;
   color: #00cc00;
+  font-weight: bold;
 }
 
-/* TABLE SECTION */
 .table-section {
   flex: 1;
-  padding: 0 20px;
-  margin-bottom: 20px;
-  width: 100%;
-  box-sizing: border-box;
+  padding: 20px;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .shipping-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #1a1a1a;
-  min-width: 100%;
 }
 
 .shipping-table thead {
   background-color: #2a2a2a;
   position: sticky;
   top: 0;
-  z-index: 10;
 }
 
 .shipping-table th {
@@ -131,8 +106,6 @@ html, body {
   text-align: left;
   font-size: 11px;
   color: #00cc00;
-  font-weight: bold;
-  text-transform: uppercase;
   border-bottom: 2px solid #00cc00;
   white-space: nowrap;
 }
@@ -143,15 +116,6 @@ html, body {
   border-bottom: 1px solid #333;
 }
 
-.shipping-table tbody tr {
-  transition: background-color 0.2s ease;
-}
-
-.shipping-table tbody tr:hover {
-  background-color: #252525;
-}
-
-/* STATUS COLORS - FLASHING */
 .status-late {
   animation: flashLate 0.8s infinite;
 }
@@ -168,46 +132,21 @@ html, body {
   background-color: rgba(100, 100, 100, 0.1);
 }
 
-/* ANIMATIONS */
 @keyframes flashLate {
-  0%, 100% {
-    background-color: #5a2a2a;
-  }
-  50% {
-    background-color: #ff3333;
-  }
+  0%, 100% { background-color: #5a2a2a; }
+  50% { background-color: #ff3333; }
 }
 
 @keyframes flashCaution {
-  0%, 100% {
-    background-color: #5a5a2a;
-  }
-  50% {
-    background-color: #ffcc00;
-  }
+  0%, 100% { background-color: #5a5a2a; }
+  50% { background-color: #ffcc00; }
 }
 
 @keyframes flashBadge {
-  0%, 100% {
-    background-color: #ffcc00;
-    color: #000;
-  }
-  50% {
-    background-color: #ff9900;
-    color: #fff;
-  }
+  0%, 100% { background-color: #ffcc00; color: #000; }
+  50% { background-color: #ff9900; color: #fff; }
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-/* STATUS BADGE */
 .status-badge {
   display: inline-block;
   padding: 4px 8px;
@@ -236,7 +175,6 @@ html, body {
   color: #fff;
 }
 
-/* PROGRESS BAR */
 .progress-bar {
   width: 100%;
   height: 18px;
@@ -248,20 +186,18 @@ html, body {
 
 .progress-fill {
   height: 100%;
-  transition: width 0.3s ease;
+  background-color: #00cc00;
 }
 
 .progress-fill.green {
   background-color: #00cc00;
 }
 
-/* DASHBOARD FOOTER */
 .dashboard-footer {
   background-color: #1a1a1a;
   border-top: 3px solid #00cc00;
   padding: 12px 20px;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .footer-status {
@@ -269,192 +205,39 @@ html, body {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  align-items: center;
-  width: 100%;
 }
 
 .status-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: inline-block;
   font-size: 12px;
-  color: #888;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 8px 12px;
-  border-radius: 4px;
+  color: #00cc00;
   background-color: #2a2a2a;
-  border-left: 3px solid #666;
+  padding: 8px 12px;
+  border-left: 3px solid #00cc00;
+  border-radius: 4px;
   white-space: nowrap;
 }
 
-.status-item.on-time {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-.status-item.caution {
-  color: #ffcc00;
-  border-left: 3px solid #ffcc00;
-}
-
-.status-item.critical {
-  color: #ff3333;
-  border-left: 3px solid #ff3333;
-  animation: pulse 1s infinite;
-}
-
-.status-item.moved {
-  color: #888;
-  border-left: 3px solid #666;
-}
-
-.status-item.webhook {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-.status-item.warehouse {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-.status-item.refresh {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-.status-item.external {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-/* ===== RESPONSIVE DESIGN ===== */
-
-/* DESKTOP (1200px+) */
-@media (min-width: 1200px) {
-  .dashboard {
-    padding: 0;
-  }
-
-  .dashboard-header h1 {
-    font-size: 32px;
-  }
-
-  .metrics-section {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    padding: 0 20px;
-  }
-
-  .metric-card {
-    padding: 20px;
-  }
-
-  .metric-value {
-    font-size: 40px;
-  }
-
-  .shipping-table th,
-  .shipping-table td {
-    padding: 12px;
-    font-size: 12px;
-  }
-}
-
-/* TABLET (768px - 1199px) */
 @media (max-width: 1199px) {
-  .dashboard {
-    padding: 0;
-  }
-
-  .dashboard-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px;
-    gap: 10px;
-  }
-
-  .dashboard-header h1 {
-    font-size: 24px;
-  }
-
-  .header-info {
-    width: 100%;
-    flex-direction: column;
-    gap: 5px;
-  }
-
   .metrics-section {
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    padding: 0 15px;
-    margin-bottom: 15px;
-  }
-
-  .metric-card {
-    padding: 15px;
-  }
-
-  .metric-value {
-    font-size: 32px;
-  }
-
-  .table-section {
-    padding: 0 15px;
-    margin-bottom: 15px;
-  }
-
-  .shipping-table th,
-  .shipping-table td {
-    padding: 10px;
-    font-size: 11px;
-  }
-
-  .dashboard-footer {
-    padding: 10px 15px;
-  }
-
-  .status-item {
-    font-size: 11px;
-    padding: 7px 10px;
   }
 }
 
-/* SMALL TABLET / MOBILE LANDSCAPE (600px - 767px) */
-@media (max-width: 767px) {
-  .dashboard {
-    padding: 0;
-  }
-
+@media (max-width: 768px) {
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 12px;
-    gap: 8px;
-    margin-bottom: 15px;
   }
 
   .dashboard-header h1 {
     font-size: 18px;
   }
 
-  .header-info {
-    width: 100%;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .date, .status {
-    font-size: 10px;
-  }
-
   .metrics-section {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    padding: 0 12px;
-    margin-bottom: 12px;
+    padding: 15px;
   }
 
   .metric-card {
@@ -465,13 +248,8 @@ html, body {
     font-size: 24px;
   }
 
-  .metric-label {
-    font-size: 9px;
-  }
-
   .table-section {
-    padding: 0 12px;
-    margin-bottom: 12px;
+    padding: 15px;
   }
 
   .shipping-table th,
@@ -481,65 +259,36 @@ html, body {
   }
 
   .dashboard-footer {
-    padding: 8px 12px;
-  }
-
-  .footer-status {
-    gap: 6px;
-    justify-content: flex-start;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    padding: 10px 15px;
   }
 
   .status-item {
     font-size: 10px;
     padding: 6px 8px;
-    gap: 4px;
-    flex-shrink: 0;
   }
 }
 
-/* PHONE (480px - 599px) */
-@media (max-width: 599px) {
-  .dashboard {
-    padding: 0;
-  }
-
+@media (max-width: 480px) {
   .dashboard-header {
-    flex-direction: column;
-    align-items: flex-start;
     padding: 10px;
-    gap: 6px;
-    margin-bottom: 10px;
   }
 
   .dashboard-header h1 {
-    font-size: 14px;
-  }
-
-  .header-info {
-    width: 100%;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .date, .status {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .metrics-section {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    padding: 0 10px;
-    margin-bottom: 10px;
-  }
-
-  .metric-card {
     padding: 10px;
   }
 
+  .metric-card {
+    padding: 8px;
+  }
+
   .metric-value {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .metric-label {
@@ -547,8 +296,7 @@ html, body {
   }
 
   .table-section {
-    padding: 0 10px;
-    margin-bottom: 10px;
+    padding: 10px;
   }
 
   .shipping-table th,
@@ -557,114 +305,18 @@ html, body {
     font-size: 9px;
   }
 
-  .status-badge {
-    font-size: 8px;
-    padding: 2px 5px;
-  }
-
-  .progress-bar {
-    height: 14px;
-  }
-
   .dashboard-footer {
-    padding: 6px 10px;
+    padding: 8px 10px;
   }
 
   .footer-status {
-    gap: 5px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .status-item {
-    font-size: 9px;
-    padding: 5px 7px;
-    gap: 3px;
-    flex-shrink: 0;
-  }
-}
-
-/* EXTRA SMALL PHONE (< 480px) */
-@media (max-width: 479px) {
-  .dashboard {
-    padding: 0;
-  }
-
-  .dashboard-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 8px;
-    gap: 5px;
-    margin-bottom: 8px;
-  }
-
-  .dashboard-header h1 {
-    font-size: 12px;
-  }
-
-  .header-info {
-    width: 100%;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .date, .status {
-    font-size: 8px;
-  }
-
-  .metrics-section {
-    grid-template-columns: repeat(2, 1fr);
     gap: 6px;
-    padding: 0 8px;
-    margin-bottom: 8px;
-  }
-
-  .metric-card {
-    padding: 8px;
-  }
-
-  .metric-value {
-    font-size: 18px;
-  }
-
-  .metric-label {
-    font-size: 7px;
-  }
-
-  .table-section {
-    padding: 0 8px;
-    margin-bottom: 8px;
-  }
-
-  .shipping-table th,
-  .shipping-table td {
-    padding: 5px;
-    font-size: 8px;
-  }
-
-  .status-badge {
-    font-size: 7px;
-    padding: 2px 4px;
-  }
-
-  .progress-bar {
-    height: 12px;
-  }
-
-  .dashboard-footer {
-    padding: 5px 8px;
-  }
-
-  .footer-status {
-    gap: 4px;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   .status-item {
     font-size: 8px;
     padding: 4px 6px;
-    gap: 2px;
     flex-shrink: 0;
   }
 }
