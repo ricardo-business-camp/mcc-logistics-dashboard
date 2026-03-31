@@ -8,16 +8,12 @@ body {
   background-color: #1a1a1a;
   color: #ffffff;
   font-family: 'Arial', sans-serif;
-  overflow-x: hidden;
 }
 
 .dashboard {
   background-color: #1a1a1a;
   min-height: 100vh;
-  padding: 20px;
   padding-bottom: 40px;
-  display: flex;
-  flex-direction: column;
 }
 
 /* HEADER */
@@ -25,9 +21,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 20px;
   margin-bottom: 30px;
   padding-bottom: 15px;
-  border-bottom: 3px solid #00cc00;
+  border-bottom: 2px solid #00cc00;
 }
 
 .dashboard-header h1 {
@@ -39,50 +36,45 @@ body {
 
 .header-info {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   align-items: center;
 }
 
 .date {
-  font-size: 14px;
-  color: #888;
-}
-
-.status {
   font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 4px;
+  color: #00cc00;
   font-weight: bold;
 }
 
-.status.live {
+.status {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-weight: bold;
   background-color: #006600;
   color: #00cc00;
 }
 
-.status.loading {
-  background-color: #665500;
-  color: #ffcc00;
-}
-
 /* METRICS SECTION */
 .metrics-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  display: flex;
   gap: 20px;
+  margin: 20px;
   margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .metric-card {
+  flex: 1;
+  min-width: 180px;
   background-color: #2a2a2a;
-  border: 2px solid #00cc00;
-  border-radius: 8px;
+  border-left: 4px solid #00cc00;
   padding: 20px;
   text-align: center;
 }
 
 .metric-label {
-  font-size: 12px;
+  font-size: 11px;
   color: #888;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -90,31 +82,27 @@ body {
 }
 
 .metric-value {
-  font-size: 40px;
+  font-size: 36px;
   font-weight: bold;
   color: #00cc00;
 }
 
 /* TABLE SECTION */
 .table-section {
-  flex: 1;
+  margin: 20px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  margin-bottom: 40px;
-  padding-bottom: 20px;
 }
 
 .shipping-table {
   width: 100%;
   border-collapse: collapse;
   background-color: #1a1a1a;
-  min-width: 1400px;
 }
 
 .shipping-table thead {
   background-color: #2a2a2a;
-  position: sticky;
-  top: 0;
+  sticky: top;
 }
 
 .shipping-table th {
@@ -126,25 +114,25 @@ body {
   text-transform: uppercase;
   border-bottom: 2px solid #00cc00;
   white-space: nowrap;
-  min-width: 80px;
+  min-width: 60px;
 }
 
 .shipping-table td {
-  padding: 10px 12px;
+  padding: 12px;
   font-size: 12px;
   border-bottom: 1px solid #333;
-  min-width: 50px;
+  min-width: 60px;
 }
 
 .shipping-table tbody tr {
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
 .shipping-table tbody tr:hover {
   background-color: #252525;
 }
 
-/* STATUS COLORS */
+/* STATUS STYLING */
 .status-late {
   animation: flashLate 0.8s infinite;
 }
@@ -198,6 +186,7 @@ body {
   border-radius: 3px;
   font-weight: bold;
   font-size: 11px;
+  text-transform: uppercase;
 }
 
 .status-late .status-badge {
@@ -222,23 +211,16 @@ body {
 /* PROGRESS BAR */
 .progress-bar {
   width: 100%;
-  height: 20px;
+  height: 18px;
   background-color: #333;
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
   margin-bottom: 4px;
-  border: 1px solid #555;
 }
 
 .progress-fill {
   height: 100%;
   transition: width 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  color: #000;
-  font-weight: bold;
 }
 
 .progress-fill.green {
@@ -256,28 +238,31 @@ body {
 .progress-text {
   font-size: 10px;
   color: #888;
+  margin-top: 2px;
 }
 
-/* RESPONSIVE DESIGN */
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 10px;
+  }
 
-/* MOBILE (default) */
-@media (max-width: 480px) {
   .dashboard-header h1 {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .metrics-section {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     gap: 10px;
-    margin-bottom: 20px;
   }
 
   .metric-card {
-    padding: 15px;
+    min-width: auto;
   }
 
   .metric-value {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .shipping-table th,
@@ -286,80 +271,43 @@ body {
     font-size: 10px;
     min-width: 50px;
   }
-
-  .table-section {
-    margin-bottom: 20px;
-  }
 }
 
-/* TABLET (481px and up) */
-@media (min-width: 481px) {
-  .metrics-section {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* DESKTOP (769px and up) */
-@media (min-width: 769px) {
-  .metrics-section {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .dashboard-header h1 {
-    font-size: 28px;
-  }
-
-  .shipping-table th,
-  .shipping-table td {
-    padding: 12px;
-    font-size: 12px;
-  }
-}
-
-/* TV (1920px and up) */
-@media (min-width: 1920px) {
+@media (max-width: 480px) {
   .dashboard {
-    padding: 40px;
+    padding: 10px;
+    padding-bottom: 20px;
+  }
+
+  .dashboard-header {
+    margin: 10px 0;
   }
 
   .dashboard-header h1 {
-    font-size: 42px;
+    font-size: 16px;
+  }
+
+  .metrics-section {
+    margin: 10px 0;
+    gap: 8px;
   }
 
   .metric-card {
-    padding: 30px;
+    padding: 12px;
   }
 
   .metric-value {
-    font-size: 56px;
+    font-size: 20px;
+  }
+
+  .table-section {
+    margin: 10px 0;
   }
 
   .shipping-table th,
   .shipping-table td {
-    padding: 16px;
-    font-size: 14px;
+    padding: 6px;
+    font-size: 9px;
+    min-width: 40px;
   }
-}
-
-/* UTILITY CLASSES */
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.text-muted {
-  color: #888;
-}
-
-.text-success {
-  color: #00cc00;
-}
-
-.text-danger {
-  color: #ff3333;
-}
-
-.text-warning {
-  color: #ffcc00;
 }
