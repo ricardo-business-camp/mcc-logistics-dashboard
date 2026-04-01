@@ -4,391 +4,452 @@
   box-sizing: border-box;
 }
 
-html, body, #root {
-  width: 100%;
-  height: 100%;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: #1a1a1a;
-  color: #fff;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+  color: #ffffff;
+  overflow-x: hidden;
 }
 
-.dashboard {
+.app {
+  min-height: 100vh;
   background-color: #1a1a1a;
-  width: 100%;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
 }
 
-.dashboard-header {
-  padding: 20px;
+/* HEADER */
+.header {
+  background-color: #1a1a1a;
   border-bottom: 3px solid #00cc00;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.dashboard-header h1 {
-  font-size: 32px;
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header h1 {
   color: #00cc00;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
 }
 
 .header-info {
   display: flex;
-  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
-}
-
-.date {
+  gap: 12px;
   font-size: 12px;
   color: #00cc00;
 }
 
-.status {
-  font-size: 11px;
-  background-color: #006600;
-  color: #00cc00;
+.connection-note {
+  background-color: #00cc00;
+  color: #1a1a1a;
   padding: 4px 8px;
-  border-radius: 3px;
+  border-radius: 4px;
+  font-weight: 600;
 }
 
-.metrics-section {
+@media (max-width: 768px) {
+  .header {
+    padding: 12px;
+  }
+
+  .header h1 {
+    font-size: 18px;
+  }
+
+  .header-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .connection-note {
+    font-size: 11px;
+  }
+}
+
+/* METRICS GRID */
+.metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 20px;
+  gap: 12px;
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
   width: 100%;
 }
 
 .metric-card {
   background-color: #2a2a2a;
-  border-left: 5px solid #00cc00;
+  border-left: 4px solid #00cc00;
   padding: 20px;
+  border-radius: 6px;
   text-align: center;
+  animation: refresh 0.6s ease-in-out;
+}
+
+.metric-card.metric-green {
+  border-left-color: #00cc00;
+}
+
+.metric-card.metric-red {
+  border-left-color: #ff3333;
 }
 
 .metric-label {
-  font-size: 11px;
-  color: #888;
+  font-size: 12px;
+  color: #999;
   text-transform: uppercase;
-  margin-bottom: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
 .metric-value {
-  font-size: 40px;
-  color: #00cc00;
-  font-weight: bold;
-  animation: refresh 0.5s ease-in-out;
-}
-
-.metric-value.metric-green {
+  font-size: 36px;
+  font-weight: 700;
   color: #00cc00;
 }
 
-.metric-value.metric-red {
+.metric-red .metric-value {
   color: #ff3333;
 }
 
 @keyframes refresh {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.05); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-.table-section {
-  padding: 20px;
-  overflow-x: auto;
-}
-
-.shipping-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.shipping-table thead {
-  background-color: #2a2a2a;
-  position: sticky;
-  top: 0;
-}
-
-.shipping-table th {
-  padding: 12px;
-  text-align: left;
-  font-size: 11px;
-  color: #00cc00;
-  border-bottom: 2px solid #00cc00;
-  white-space: nowrap;
-}
-
-.shipping-table td {
-  padding: 12px;
-  font-size: 12px;
-  border-bottom: 1px solid #333;
-}
-
-.status-late {
-  animation: flashLate 0.8s infinite;
-}
-
-.status-caution {
-  animation: flashCaution 1s infinite;
-}
-
-.status-ontime {
-  background-color: rgba(0, 200, 0, 0.1);
-}
-
-.status-moved {
-  background-color: rgba(100, 100, 100, 0.1);
-}
-
-@keyframes flashLate {
-  0%, 100% { background-color: #5a2a2a; }
-  50% { background-color: #ff3333; }
-}
-
-@keyframes flashCaution {
-  0%, 100% { background-color: #5a5a2a; }
-  50% { background-color: #ffcc00; }
-}
-
-@keyframes flashBadge {
-  0%, 100% { background-color: #ffcc00; color: #000; }
-  50% { background-color: #ff9900; color: #fff; }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 3px;
-  font-weight: bold;
-  font-size: 11px;
-  text-transform: uppercase;
-}
-
-.status-late .status-badge {
-  background-color: #ff3333;
-  color: #fff;
-}
-
-.status-caution .status-badge {
-  animation: flashBadge 1s infinite;
-}
-
-.status-ontime .status-badge {
-  background-color: #00cc00;
-  color: #000;
-}
-
-.status-moved .status-badge {
-  background-color: #666;
-  color: #fff;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 18px;
-  background-color: #333;
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 4px;
-}
-
-.progress-fill {
-  height: 100%;
-  background-color: #00cc00;
-}
-
-.progress-fill.green {
-  background-color: #00cc00;
-}
-
-.dashboard-footer {
-  background-color: #1a1a1a;
-  border-top: 3px solid #00cc00;
-  padding: 12px 20px;
-  width: 100%;
-  margin: 0;
-  margin-top: 20px;
-}
-
-.footer-status {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 8px;
-  justify-content: flex-start;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 8px;
-}
-
-.status-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  background-color: #2a2a2a;
-  padding: 6px 10px;
-  border-left: 3px solid #666;
-  border-radius: 3px;
-  white-space: nowrap;
-  font-weight: bold;
-  flex-shrink: 0;
-}
-
-/* STATUS INDICATOR COLORS */
-.status-item.status-ontime {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-.status-item.status-caution {
-  color: #ffcc00;
-  border-left: 3px solid #ffcc00;
-}
-
-.status-item.status-critical {
-  color: #ff3333;
-  border-left: 3px solid #ff3333;
-}
-
-.status-item.status-moved {
-  color: #888;
-  border-left: 3px solid #888;
-}
-
-.status-item.status-webhook {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-.status-item.status-warehouse {
-  color: #ffcc00;
-  border-left: 3px solid #ffcc00;
-}
-
-.status-item.status-refresh {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-  animation: spin 2s linear infinite;
-}
-
-.status-item.status-external {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-@media (max-width: 1199px) {
-  .metrics-section {
+@media (max-width: 1024px) {
+  .metrics-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .metric-value {
+    font-size: 28px;
   }
 }
 
 @media (max-width: 768px) {
-  .dashboard-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .dashboard-header h1 {
-    font-size: 18px;
-  }
-
-  .metrics-section {
+  .metrics-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    padding: 15px;
+    padding: 10px;
   }
 
   .metric-card {
-    padding: 12px;
+    padding: 16px;
   }
 
   .metric-value {
     font-size: 24px;
   }
 
-  .table-section {
-    padding: 15px;
-  }
-
-  .shipping-table th,
-  .shipping-table td {
-    padding: 8px;
-    font-size: 10px;
-  }
-
-  .dashboard-footer {
-    padding: 10px 15px;
-    margin-top: 15px;
-  }
-
-  .status-item {
-    font-size: 9px;
-    padding: 5px 8px;
+  .metric-label {
+    font-size: 11px;
   }
 }
 
-@media (max-width: 480px) {
-  .dashboard-header {
-    padding: 10px;
-  }
+/* TABLE CONTAINER */
+.table-container {
+  flex: 1;
+  overflow-x: auto;
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
 
-  .dashboard-header h1 {
-    font-size: 12px;
-  }
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1a1a1a;
+  font-size: 13px;
+}
 
-  .metrics-section {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    padding: 10px;
-  }
+.orders-table thead {
+  position: sticky;
+  top: 0;
+  background-color: #2a2a2a;
+  z-index: 50;
+}
 
-  .metric-card {
+.orders-table th {
+  color: #00cc00;
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #00cc00;
+  background-color: #2a2a2a;
+}
+
+.orders-table tbody tr {
+  border-bottom: 1px solid #333;
+  transition: all 0.3s ease;
+}
+
+.orders-table tbody tr:hover {
+  background-color: #252525;
+}
+
+.orders-table td {
+  padding: 12px 8px;
+  color: #ddd;
+  white-space: nowrap;
+}
+
+/* STATUS CELL STYLING */
+.status-cell {
+  padding: 8px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+/* ROW STATUS STYLES */
+.status-on-time {
+  background-color: #1a2a1a;
+}
+
+.status-on-time .status-badge {
+  background-color: #00cc00;
+  color: #1a1a1a;
+}
+
+.status-caution {
+  background-color: #2a2a1a;
+  animation: flash-yellow 1.5s infinite;
+}
+
+.status-caution .status-badge {
+  background-color: #ffcc00;
+  color: #1a1a1a;
+}
+
+.status-late {
+  background-color: #2a1a1a;
+  animation: flash-red 1.5s infinite;
+}
+
+.status-late .status-badge {
+  background-color: #ff3333;
+  color: #ffffff;
+}
+
+.status-moved {
+  background-color: #2a2a2a;
+}
+
+.status-moved .status-badge {
+  background-color: #666666;
+  color: #ffffff;
+}
+
+@keyframes flash-yellow {
+  0%, 100% {
+    background-color: #2a2a1a;
+  }
+  50% {
+    background-color: #3a3a1a;
+  }
+}
+
+@keyframes flash-red {
+  0%, 100% {
+    background-color: #2a1a1a;
+  }
+  50% {
+    background-color: #3a1a1a;
+  }
+}
+
+/* READY COLUMN COLORS */
+.ready-cell {
+  font-weight: 600;
+  border-radius: 3px;
+  padding: 6px 8px;
+  text-align: center;
+}
+
+.ready-full {
+  background-color: #00cc00;
+  color: #1a1a1a;
+}
+
+.ready-high {
+  background-color: #33ff33;
+  color: #1a1a1a;
+}
+
+.ready-medium {
+  background-color: #ffcc00;
+  color: #1a1a1a;
+}
+
+.ready-low {
+  background-color: #ff6600;
+  color: #ffffff;
+}
+
+/* STATUS BAR FOOTER - FIXED TO 1 LINE */
+.status-bar {
+  background-color: #2a2a2a;
+  border-top: 3px solid #00cc00;
+  padding: 12px;
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+.status-bar-content {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.status-bar-content::-webkit-scrollbar {
+  height: 6px;
+}
+
+.status-bar-content::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.status-bar-content::-webkit-scrollbar-thumb {
+  background: #00cc00;
+  border-radius: 3px;
+}
+
+.status-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+.status-item span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-on-time {
+  background-color: #00cc00;
+  color: #1a1a1a;
+}
+
+.status-caution {
+  background-color: #ffcc00;
+  color: #1a1a1a;
+}
+
+.status-late {
+  background-color: #ff3333;
+  color: #ffffff;
+}
+
+.status-moved {
+  background-color: #666666;
+  color: #ffffff;
+}
+
+.status-webhook {
+  background-color: #00cc00;
+  color: #1a1a1a;
+}
+
+.status-warehouse {
+  background-color: #ffcc00;
+  color: #1a1a1a;
+}
+
+.status-refresh {
+  background-color: #00cc00;
+  color: #1a1a1a;
+}
+
+.status-external {
+  background-color: #00cc00;
+  color: #1a1a1a;
+}
+
+@media (max-width: 768px) {
+  .status-bar {
     padding: 8px;
   }
 
-  .metric-value {
-    font-size: 18px;
-  }
-
-  .metric-label {
-    font-size: 8px;
-  }
-
-  .table-section {
-    padding: 10px;
-  }
-
-  .shipping-table th,
-  .shipping-table td {
-    padding: 6px;
-    font-size: 9px;
-  }
-
-  .dashboard-footer {
-    padding: 8px 10px;
-    margin-top: 10px;
-  }
-
-  .footer-status {
-    gap: 6px;
+  .status-bar-content {
+    gap: 8px;
   }
 
   .status-item {
-    font-size: 8px;
-    padding: 4px 6px;
+    padding: 6px 10px;
+    font-size: 11px;
   }
+
+  .table-container {
+    padding: 8px;
+  }
+
+  .orders-table {
+    font-size: 12px;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 8px 6px;
+  }
+}
+
+/* Ensure no horizontal overflow */
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.app {
+  width: 100%;
 }
