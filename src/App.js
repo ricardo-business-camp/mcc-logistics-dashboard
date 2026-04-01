@@ -68,11 +68,11 @@ function App() {
         </div>
         <div className="metric-card">
           <div className="metric-label">ON-TIME %</div>
-          <div className="metric-value">{metrics.ontimePercent}%</div>
+          <div className="metric-value metric-green">{metrics.ontimePercent}%</div>
         </div>
         <div className="metric-card">
           <div className="metric-label">AT RISK</div>
-          <div className="metric-value">{metrics.atRisk}</div>
+          <div className="metric-value metric-red">{metrics.atRisk}</div>
         </div>
         <div className="metric-card">
           <div className="metric-label">NEXT CUT-OFF</div>
@@ -127,14 +127,14 @@ function App() {
 
       <div className="dashboard-footer">
         <div className="footer-status">
-          <span className="status-item">On Time</span>
-          <span className="status-item">Caution (1hr)</span>
-          <span className="status-item">Critical (Late)</span>
-          <span className="status-item">Moved</span>
-          <span className="status-item">n8n Webhook Connected</span>
-          <span className="status-item">Warehouse Tracking Active</span>
-          <span className="status-item">Auto-Refresh Every 30 Seconds</span>
-          <span className="status-item">External Warehouse Visibility</span>
+          <span className="status-item status-ontime">✓ On Time</span>
+          <span className="status-item status-caution">⚠ Caution (1hr)</span>
+          <span className="status-item status-critical">🔴 Critical (Late)</span>
+          <span className="status-item status-moved">↻ Moved</span>
+          <span className="status-item status-webhook">🔗 n8n Webhook Connected</span>
+          <span className="status-item status-warehouse">🏭 Warehouse Tracking Active</span>
+          <span className="status-item status-refresh">🔄 Auto-Refresh Every 30 Seconds</span>
+          <span className="status-item status-external">🚚 External Warehouse Visibility</span>
         </div>
       </div>
     </div>
