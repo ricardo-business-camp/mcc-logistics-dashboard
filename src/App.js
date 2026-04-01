@@ -3,6 +3,7 @@ import './App.css';
 
 function App() {
   const [time, setTime] = useState(new Date());
+  const [lastRefresh, setLastRefresh] = useState(new Date());
   const [metrics, setMetrics] = useState({
     linesToday: 285,
     ontimePercent: 82,
@@ -19,6 +20,7 @@ function App() {
 
   useEffect(() => {
     const refreshTimer = setInterval(() => {
+      setLastRefresh(new Date());
       setMetrics(prev => ({
         linesToday: Math.floor(Math.random() * 50) + 260,
         ontimePercent: Math.floor(Math.random() * 20) + 75,
@@ -128,13 +130,13 @@ function App() {
       <div className="dashboard-footer">
         <div className="footer-status">
           <span className="status-item status-ontime">✓ On Time</span>
-          <span className="status-item status-caution">⚠ Caution (1hr)</span>
-          <span className="status-item status-critical">🔴 Critical (Late)</span>
+          <span className="status-item status-caution">⚠ Caution</span>
+          <span className="status-item status-critical">🔴 Critical</span>
           <span className="status-item status-moved">↻ Moved</span>
-          <span className="status-item status-webhook">🔗 n8n Webhook Connected</span>
-          <span className="status-item status-warehouse">🏭 Warehouse Tracking Active</span>
-          <span className="status-item status-refresh">🔄 Auto-Refresh Every 30 Seconds</span>
-          <span className="status-item status-external">🚚 External Warehouse Visibility</span>
+          <span className="status-item status-webhook">🔗 Webhook</span>
+          <span className="status-item status-warehouse">🏭 Warehouse</span>
+          <span className="status-item status-refresh">🔄 Refreshing</span>
+          <span className="status-item status-external">🚚 External</span>
         </div>
       </div>
     </div>
