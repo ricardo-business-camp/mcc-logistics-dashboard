@@ -3,7 +3,6 @@ import './App.css';
 
 function App() {
   const [time, setTime] = useState(new Date());
-  const [lastRefresh, setLastRefresh] = useState(new Date());
   const [metrics, setMetrics] = useState({
     linesToday: 285,
     ontimePercent: 82,
@@ -11,79 +10,265 @@ function App() {
     nextCutoff: '2:00 PM'
   });
 
+  const [orders, setOrders] = useState([
+    {
+      id: 1,
+      status: 'LATE',
+      cutoff: '10:00 AM',
+      timeLeft: '-15 mins',
+      city: 'FREMONT',
+      delivery: '5871234',
+      job: '4001234',
+      product: 'LABEL ROLL 8.5x11',
+      production: '85%',
+      timeInStatus: '2h 30m',
+      receipted: '0',
+      orderQty: '1,500,000',
+      readyPercent: '45%',
+      truck: 'SHUTTLE-Q3',
+      warehouse: 'MCC PLANT'
+    },
+    {
+      id: 2,
+      status: 'ON-TIME',
+      cutoff: '2:00 PM',
+      timeLeft: '3 hrs 45 mins',
+      city: 'LONDON',
+      delivery: '5874321',
+      job: '4004321',
+      product: 'CARDS 10x12',
+      production: '100%',
+      timeInStatus: '1h 15m',
+      receipted: '100,000',
+      orderQty: '95,000',
+      readyPercent: '100%',
+      truck: 'SHUTTLE-Q1',
+      warehouse: 'EXTERNAL'
+    },
+    {
+      id: 3,
+      status: 'CAUTION',
+      cutoff: '1:30 PM',
+      timeLeft: '45 mins',
+      city: 'ORLANDO',
+      delivery: '5874312',
+      job: '4004213',
+      product: 'ENVELOPES PACK',
+      production: '95%',
+      timeInStatus: '3h 20m',
+      receipted: '0',
+      orderQty: '1,200,000',
+      readyPercent: '75%',
+      truck: 'SHUTTLE-Q2',
+      warehouse: 'EXTERNAL'
+    },
+    {
+      id: 4,
+      status: 'ON-TIME',
+      cutoff: '4:00 PM',
+      timeLeft: '4 hrs 45 mins',
+      city: 'MARKHAM',
+      delivery: '5879631',
+      job: '4005126',
+      product: 'BUSINESS CARDS',
+      production: '100%',
+      timeInStatus: '45m',
+      receipted: '0',
+      orderQty: '30,000',
+      readyPercent: '100%',
+      truck: 'SHUTTLE-Q3',
+      warehouse: 'MCC PLANT'
+    },
+    {
+      id: 5,
+      status: 'MOVED',
+      cutoff: '10:00 AM',
+      timeLeft: '-15 mins',
+      city: 'BROOKLYN',
+      delivery: '5873563',
+      job: '4006589',
+      product: 'POCKET FOLDER',
+      production: '100%',
+      timeInStatus: '4h 50m',
+      receipted: '0',
+      orderQty: '300,000',
+      readyPercent: '100%',
+      truck: 'SHIPPED',
+      warehouse: 'MCC PLANT'
+    },
+    {
+      id: 6,
+      status: 'ON-TIME',
+      cutoff: '3:15 PM',
+      timeLeft: '3 hrs 20 mins',
+      city: 'TORONTO',
+      delivery: '5875432',
+      job: '4003456',
+      product: 'FLYERS 8.5x11',
+      production: '100%',
+      timeInStatus: '1h 40m',
+      receipted: '50,000',
+      orderQty: '500,000',
+      readyPercent: '100%',
+      truck: 'SHUTTLE-Q1',
+      warehouse: 'MCC PLANT'
+    },
+    {
+      id: 7,
+      status: 'CAUTION',
+      cutoff: '12:30 PM',
+      timeLeft: '25 mins',
+      city: 'DETROIT',
+      delivery: '5872109',
+      job: '4002987',
+      product: 'POSTCARDS 5x7',
+      production: '92%',
+      timeInStatus: '2h 15m',
+      receipted: '125,000',
+      orderQty: '250,000',
+      readyPercent: '60%',
+      truck: 'SHUTTLE-Q2',
+      warehouse: 'EXTERNAL'
+    },
+    {
+      id: 8,
+      status: 'ON-TIME',
+      cutoff: '5:30 PM',
+      timeLeft: '5 hrs 40 mins',
+      city: 'CHICAGO',
+      delivery: '5876543',
+      job: '4007654',
+      product: 'BROCHURE TRI-FOLD',
+      production: '88%',
+      timeInStatus: '30m',
+      receipted: '0',
+      orderQty: '150,000',
+      readyPercent: '85%',
+      truck: 'SHUTTLE-Q3',
+      warehouse: 'MCC PLANT'
+    }
+  ]);
+
+  // Update time every second
   useEffect(() => {
-    const timer = setInterval(() => {
+    const timeInterval = setInterval(() => {
       setTime(new Date());
     }, 1000);
-    return () => clearInterval(timer);
+
+    return () => clearInterval(timeInterval);
   }, []);
 
+  // Fetch and update ALL metrics every 30 seconds
   useEffect(() => {
-    const refreshTimer = setInterval(() => {
-      setLastRefresh(new Date());
-      setMetrics(prev => ({
-        linesToday: Math.floor(Math.random() * 50) + 260,
-        ontimePercent: Math.floor(Math.random() * 20) + 75,
-        atRisk: Math.floor(Math.random() * 10) + 2,
-        nextCutoff: '2:00 PM'
-      }));
-    }, 30000);
-    return () => clearInterval(refreshTimer);
+    const fetchMetrics = async () => {
+      try {
+        const response = await fetch('https://rickie92.app.n8n.cloud/webhook/2fcdbd6-24d5-4982-babc-685ca7e7f3cb');
+        const data = await response.json();
+
+        if (data && data.metrics) {
+          setMetrics({
+            linesToday: data.metrics.linesToday || 285,
+            ontimePercent: data.metrics.ontimePercent || 82,
+            atRisk: data.metrics.atRisk || 7,
+            nextCutoff: data.metrics.nextCutoff || '2:00 PM'
+          });
+        }
+
+        if (data && data.orders) {
+          setOrders(data.orders);
+        }
+      } catch (error) {
+        console.log('Using mock data - n8n webhook connection pending');
+      }
+    };
+
+    // Fetch immediately on load
+    fetchMetrics();
+
+    // Set interval for every 30 seconds
+    const metricsInterval = setInterval(fetchMetrics, 30000);
+
+    return () => clearInterval(metricsInterval);
   }, []);
 
-  const getStatusClass = (status) => {
-    if (status === 'LATE') return 'status-late';
-    if (status === 'CAUTION') return 'status-caution';
-    if (status === 'ON-TIME') return 'status-ontime';
-    if (status === 'MOVED') return 'status-moved';
-    return '';
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
   };
 
-  const orders = [
-    { status: 'LATE', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'FREMONT', delivery: '5871234', job: '4001234', product: 'LABEL ROLL 8.5x11', production: 'CUTTING', timeInStatus: '6:45', receipted: 0, orderQty: '1,500,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
-    { status: 'ON-TIME', cutoff: '2:00 PM', timeLeft: '3 hrs 45 mins', city: 'LONDON', delivery: '5874321', job: '4004321', product: 'CARDSTOCK 10x12', production: 'JOGGED', timeInStatus: '3:22', receipted: '100,000', orderQty: '95,000', orderStatus: 'READY', truck: 'SHUTTLE-Q1', warehouse: 'EXTERNAL' },
-    { status: 'CAUTION', cutoff: '1:30 PM', timeLeft: '45 mins', city: 'ORLANDO', delivery: '5874312', job: '4004213', product: 'ENVELOPE PACK', production: 'PRINTED', timeInStatus: '1:10', receipted: 0, orderQty: '1,200,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
-    { status: 'ON-TIME', cutoff: '4:00 PM', timeLeft: '4 hrs 45 mins', city: 'MARKHAM', delivery: '5879631', job: '4005126', product: 'BUSINESS CARDS', production: 'CUTTING', timeInStatus: '0:35', receipted: 0, orderQty: '30,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
-    { status: 'MOVED', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'BROOKLYN', delivery: '5873563', job: '4006589', product: 'POCKET FOLDER', production: 'CREOPLATE', timeInStatus: '8:15', receipted: 0, orderQty: '300,000', orderStatus: 'NOT READY', truck: 'SHIPPED', warehouse: 'MCC PLANT' },
-    { status: 'ON-TIME', cutoff: '3:15 PM', timeLeft: '3 hrs 20 mins', city: 'TORONTO', delivery: '5875432', job: '4003456', product: 'FLYERS 8.5x11', production: 'PRINTING', timeInStatus: '2:45', receipted: '50,000', orderQty: '500,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q1', warehouse: 'MCC PLANT' },
-    { status: 'CAUTION', cutoff: '12:30 PM', timeLeft: '25 mins', city: 'DETROIT', delivery: '5872109', job: '4002987', product: 'POSTCARDS 5x7', production: 'JOGGED', timeInStatus: '4:20', receipted: '125,000', orderQty: '250,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
-    { status: 'ON-TIME', cutoff: '5:30 PM', timeLeft: '5 hrs 40 mins', city: 'CHICAGO', delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD', production: 'CUTTING', timeInStatus: '1:05', receipted: 0, orderQty: '150,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' }
-  ];
+  const formatDate = (date) => {
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(-2);
+    return `${month}/${day}/${year}`;
+  };
 
-  const dateStr = String(time.getMonth() + 1).padStart(2, '0') + '/' + String(time.getDate()).padStart(2, '0') + '/' + String(time.getFullYear()).slice(-2);
-  const timeStr = String(time.getHours()).padStart(2, '0') + ':' + String(time.getMinutes()).padStart(2, '0') + ':' + String(time.getSeconds()).padStart(2, '0');
+  const getStatusClass = (status) => {
+    switch (status) {
+      case 'LATE':
+        return 'status-late';
+      case 'CAUTION':
+        return 'status-caution';
+      case 'ON-TIME':
+        return 'status-on-time';
+      case 'MOVED':
+        return 'status-moved';
+      default:
+        return '';
+    }
+  };
+
+  const getReadyPercentColor = (readyPercent) => {
+    const percent = parseInt(readyPercent);
+    if (percent === 100) return 'ready-full';
+    if (percent >= 75) return 'ready-high';
+    if (percent >= 50) return 'ready-medium';
+    return 'ready-low';
+  };
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>MCC LOGISTICS COMMAND CENTRE</h1>
-        <div className="header-info">
-          <span className="date">Date: {dateStr} | Time: {timeStr}</span>
-          <span className="status">Connection Note: Using mock data</span>
+    <div className="app">
+      {/* Header */}
+      <div className="header">
+        <div className="header-content">
+          <h1>MCC LOGISTICS COMMAND CENTRE</h1>
+          <div className="header-info">
+            <span>Date: {formatDate(time)} | Time: {formatTime(time)}</span>
+            <span className="connection-note">Connection Note: Using mock data</span>
+          </div>
         </div>
       </div>
 
-      <div className="metrics-section">
-        <div className="metric-card">
+      {/* Metrics Grid */}
+      <div className="metrics-grid">
+        <div className="metric-card metric-green">
           <div className="metric-label">LINES TODAY</div>
           <div className="metric-value">{metrics.linesToday}</div>
         </div>
-        <div className="metric-card">
+
+        <div className="metric-card metric-green">
           <div className="metric-label">ON-TIME %</div>
-          <div className="metric-value metric-green">{metrics.ontimePercent}%</div>
+          <div className="metric-value">{metrics.ontimePercent}%</div>
         </div>
-        <div className="metric-card">
+
+        <div className="metric-card metric-red">
           <div className="metric-label">AT RISK</div>
-          <div className="metric-value metric-red">{metrics.atRisk}</div>
+          <div className="metric-value">{metrics.atRisk}</div>
         </div>
-        <div className="metric-card">
+
+        <div className="metric-card metric-green">
           <div className="metric-label">NEXT CUT-OFF</div>
           <div className="metric-value">{metrics.nextCutoff}</div>
         </div>
       </div>
 
-      <div className="table-section">
-        <table className="shipping-table">
+      {/* Orders Table */}
+      <div className="table-container">
+        <table className="orders-table">
           <thead>
             <tr>
               <th>STATUS</th>
@@ -94,7 +279,7 @@ function App() {
               <th>JOB</th>
               <th>PRODUCT</th>
               <th>PRODUCTION</th>
-              <th>TIME</th>
+              <th>TIME IN STATUS</th>
               <th>RECEIPTED</th>
               <th>ORDER QTY</th>
               <th>READY</th>
@@ -103,40 +288,59 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {orders.map(function(order, idx) {
-              return (
-                <tr key={idx} className={getStatusClass(order.status)}>
-                  <td><span className="status-badge">{order.status}</span></td>
-                  <td>{order.cutoff}</td>
-                  <td>{order.timeLeft}</td>
-                  <td>{order.city}</td>
-                  <td>{order.delivery}</td>
-                  <td>{order.job}</td>
-                  <td>{order.product}</td>
-                  <td>{order.production}</td>
-                  <td>{order.timeInStatus}</td>
-                  <td>{order.receipted}</td>
-                  <td>{order.orderQty}</td>
-                  <td><div className="progress-bar"><div className="progress-fill green" style={{width: '45%'}}></div></div></td>
-                  <td>{order.truck}</td>
-                  <td>{order.warehouse}</td>
-                </tr>
-              );
-            })}
+            {orders.map((order) => (
+              <tr key={order.id} className={getStatusClass(order.status)}>
+                <td className="status-cell">
+                  <span className="status-badge">{order.status}</span>
+                </td>
+                <td>{order.cutoff}</td>
+                <td>{order.timeLeft}</td>
+                <td>{order.city}</td>
+                <td>{order.delivery}</td>
+                <td>{order.job}</td>
+                <td>{order.product}</td>
+                <td>{order.production}</td>
+                <td>{order.timeInStatus}</td>
+                <td>{order.receipted}</td>
+                <td>{order.orderQty}</td>
+                <td className={`ready-cell ${getReadyPercentColor(order.readyPercent)}`}>
+                  {order.readyPercent}
+                </td>
+                <td>{order.truck}</td>
+                <td>{order.warehouse}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
-      <div className="dashboard-footer">
-        <div className="footer-status">
-          <span className="status-item status-ontime">✓ On Time</span>
-          <span className="status-item status-caution">⚠ Caution</span>
-          <span className="status-item status-critical">🔴 Critical</span>
-          <span className="status-item status-moved">↻ Moved</span>
-          <span className="status-item status-webhook">🔗 Webhook</span>
-          <span className="status-item status-warehouse">🏭 Warehouse</span>
-          <span className="status-item status-refresh">🔄 Refreshing</span>
-          <span className="status-item status-external">🚚 External</span>
+      {/* Status Bar Footer */}
+      <div className="status-bar">
+        <div className="status-bar-content">
+          <div className="status-item status-on-time">
+            <span>✓ On Time</span>
+          </div>
+          <div className="status-item status-caution">
+            <span>! Caution</span>
+          </div>
+          <div className="status-item status-late">
+            <span>🔴 Critical (Late)</span>
+          </div>
+          <div className="status-item status-moved">
+            <span>↻ Moved</span>
+          </div>
+          <div className="status-item status-webhook">
+            <span>🔗 n8n Webhook Connected</span>
+          </div>
+          <div className="status-item status-warehouse">
+            <span>🏭 Warehouse Tracking Active</span>
+          </div>
+          <div className="status-item status-refresh">
+            <span>🔄 Auto-Refresh Every 30 Seconds</span>
+          </div>
+          <div className="status-item status-external">
+            <span>🚚 External Warehouse Visibility</span>
+          </div>
         </div>
       </div>
     </div>
