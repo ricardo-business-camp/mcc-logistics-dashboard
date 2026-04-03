@@ -203,6 +203,31 @@ html, body, #root {
   background-color: #00cc00;
 }
 
+/* READY BLOCK COLORS - Based on Status */
+.ready-block {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  background-color: #00cc00;
+}
+
+.ready-block.ready-late {
+  background-color: #ff3333;
+}
+
+.ready-block.ready-caution {
+  background-color: #ffcc00;
+}
+
+.ready-block.ready-ontime {
+  background-color: #00cc00;
+}
+
+.ready-block.ready-moved {
+  background-color: #666666;
+}
+
 .dashboard-footer {
   background-color: #1a1a1a;
   border-top: 3px solid #00cc00;
@@ -330,6 +355,11 @@ html, body, #root {
     font-size: 10px;
     padding: 6px 8px;
   }
+
+  .ready-block {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -383,5 +413,10 @@ html, body, #root {
     font-size: 8px;
     padding: 4px 6px;
     flex-shrink: 0;
+  }
+
+  .ready-block {
+    width: 20px;
+    height: 20px;
   }
 }
