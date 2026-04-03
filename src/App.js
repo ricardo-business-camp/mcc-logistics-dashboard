@@ -10,8 +10,6 @@ function App() {
     nextCutoff: '2:00 PM'
   });
 
-  const productionStatuses = ['CUTTING', 'JOGGED', 'PRINTING', 'Creoplateing', 'Die-cutting', 'Reconciling'];
-
   const [orders, setOrders] = useState([
     { status: 'LATE', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'FREMONT', delivery: '5871234', job: '4001234', product: 'LABEL ROLL 8.5x11', production: 'CUTTING', timeInStatus: '6:45', receipted: 0, orderQty: '1,500,000', jobStart: '04/01/26 8:30 AM', jobFinish: '04/02/26 2:45 PM', dueDate: '04/02/26 10:00 AM', customer: 'Acme Corp', readyPercent: 45, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
     { status: 'ON-TIME', cutoff: '2:00 PM', timeLeft: '3 hrs 45 mins', city: 'LONDON', delivery: '5874321', job: '4004321', product: 'CARDSTOCK 10x12', production: 'JOGGED', timeInStatus: '3:22', receipted: '100,000', orderQty: '95,000', jobStart: '03/31/26 10:15 AM', jobFinish: '04/02/26 1:20 PM', dueDate: '04/02/26 2:00 PM', customer: 'PrintCo Inc', readyPercent: 100, truck: 'SHUTTLE-Q1', warehouse: 'EXTERNAL' },
@@ -23,7 +21,6 @@ function App() {
     { status: 'ON-TIME', cutoff: '5:30 PM', timeLeft: '5 hrs 40 mins', city: 'CHICAGO', delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD', production: 'Die-cutting', timeInStatus: '1:05', receipted: 0, orderQty: '150,000', jobStart: '04/02/26 6:45 AM', jobFinish: '04/02/26 9:15 AM', dueDate: '04/02/26 5:30 PM', customer: 'ProPrint Group', readyPercent: 85, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' }
   ]);
 
-  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
@@ -31,7 +28,6 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Update metrics every 30 seconds
   useEffect(() => {
     const refreshTimer = setInterval(() => {
       setMetrics(prev => ({
@@ -44,8 +40,9 @@ function App() {
     return () => clearInterval(refreshTimer);
   }, []);
 
-  // Refresh table data every 30 seconds
   useEffect(() => {
+    const productionStatuses = ['CUTTING', 'JOGGED', 'PRINTING', 'Creoplateing', 'Die-cutting', 'Reconciling'];
+    
     const tableRefreshTimer = setInterval(() => {
       setOrders(prevOrders => 
         prevOrders.map(order => {
@@ -59,7 +56,7 @@ function App() {
       );
     }, 30000);
     return () => clearInterval(tableRefreshTimer);
-  }, [productionStatuses]);
+  }, []);
 
   const getStatusClass = (status) => {
     if (status === 'LATE') return 'status-late';
