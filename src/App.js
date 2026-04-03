@@ -10,6 +10,18 @@ function App() {
     nextCutoff: '2:00 PM'
   });
 
+  const [orders, setOrders] = useState([
+    { status: 'LATE', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'FREMONT', delivery: '5871234', job: '4001234', product: 'LABEL ROLL 8.5x11', production: 'CUTTING', timeInStatus: '6:45', receipted: 0, orderQty: '1,500,000', jobStart: '04/01/26 8:30 AM', jobFinish: '04/02/26 2:45 PM', dueDate: '04/02/26 10:00 AM', customer: 'Acme Corp', readyPercent: 45, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
+    { status: 'ON-TIME', cutoff: '2:00 PM', timeLeft: '3 hrs 45 mins', city: 'LONDON', delivery: '5874321', job: '4004321', product: 'CARDSTOCK 10x12', production: 'JOGGED', timeInStatus: '3:22', receipted: '100,000', orderQty: '95,000', jobStart: '03/31/26 10:15 AM', jobFinish: '04/02/26 1:20 PM', dueDate: '04/02/26 2:00 PM', customer: 'PrintCo Inc', readyPercent: 100, truck: 'SHUTTLE-Q1', warehouse: 'EXTERNAL' },
+    { status: 'CAUTION', cutoff: '1:30 PM', timeLeft: '45 mins', city: 'ORLANDO', delivery: '5874312', job: '4004213', product: 'ENVELOPE PACK', production: 'PRINTED', timeInStatus: '1:10', receipted: 0, orderQty: '1,200,000', jobStart: '04/01/26 9:45 AM', jobFinish: '04/02/26 12:30 PM', dueDate: '04/02/26 1:30 PM', customer: 'Global Solutions', readyPercent: 75, truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
+    { status: 'ON-TIME', cutoff: '4:00 PM', timeLeft: '4 hrs 45 mins', city: 'MARKHAM', delivery: '5879631', job: '4005126', product: 'BUSINESS CARDS', production: 'CUTTING', timeInStatus: '0:35', receipted: 0, orderQty: '30,000', jobStart: '04/02/26 7:00 AM', jobFinish: '04/02/26 11:45 AM', dueDate: '04/02/26 4:00 PM', customer: 'NextGen Services', readyPercent: 100, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
+    { status: 'MOVED', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'BROOKLYN', delivery: '5873563', job: '4006589', product: 'POCKET FOLDER', production: 'CREOPLATE', timeInStatus: '8:15', receipted: 0, orderQty: '300,000', jobStart: '03/30/26 2:00 PM', jobFinish: '04/01/26 4:30 PM', dueDate: '04/01/26 10:00 AM', customer: 'Elite Brands', readyPercent: 100, truck: 'SHIPPED', warehouse: 'MCC PLANT' },
+    { status: 'ON-TIME', cutoff: '3:15 PM', timeLeft: '3 hrs 20 mins', city: 'TORONTO', delivery: '5875432', job: '4003456', product: 'FLYERS 8.5x11', production: 'PRINTING', timeInStatus: '2:45', receipted: '50,000', orderQty: '500,000', jobStart: '03/31/26 11:30 AM', jobFinish: '04/02/26 10:20 AM', dueDate: '04/02/26 3:15 PM', customer: 'Marketing Plus', readyPercent: 100, truck: 'SHUTTLE-Q1', warehouse: 'MCC PLANT' },
+    { status: 'CAUTION', cutoff: '12:30 PM', timeLeft: '25 mins', city: 'DETROIT', delivery: '5872109', job: '4002987', product: 'POSTCARDS 5x7', production: 'JOGGED', timeInStatus: '4:20', receipted: '125,000', orderQty: '250,000', jobStart: '04/01/26 1:00 PM', jobFinish: '04/02/26 11:50 AM', dueDate: '04/02/26 12:30 PM', customer: 'Direct Mail Ltd', readyPercent: 60, truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
+    { status: 'ON-TIME', cutoff: '5:30 PM', timeLeft: '5 hrs 40 mins', city: 'CHICAGO', delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD', production: 'CUTTING', timeInStatus: '1:05', receipted: 0, orderQty: '150,000', jobStart: '04/02/26 6:45 AM', jobFinish: '04/02/26 9:15 AM', dueDate: '04/02/26 5:30 PM', customer: 'ProPrint Group', readyPercent: 85, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' }
+  ]);
+
+  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
@@ -17,6 +29,7 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  // Update metrics every 30 seconds
   useEffect(() => {
     const refreshTimer = setInterval(() => {
       setMetrics(prev => ({
@@ -27,6 +40,19 @@ function App() {
       }));
     }, 30000);
     return () => clearInterval(refreshTimer);
+  }, []);
+
+  // REFRESH THE TABLE DATA EVERY 30 SECONDS
+  useEffect(() => {
+    const tableRefreshTimer = setInterval(() => {
+      setOrders(prevOrders => 
+        prevOrders.map(order => ({
+          ...order,
+          readyPercent: Math.floor(Math.random() * 100) + 1
+        }))
+      );
+    }, 30000);
+    return () => clearInterval(tableRefreshTimer);
   }, []);
 
   const getStatusClass = (status) => {
@@ -44,17 +70,6 @@ function App() {
     if (status === 'MOVED') return 'ready-moved';
     return 'ready-ontime';
   };
-
-  const orders = [
-    { status: 'LATE', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'FREMONT', delivery: '5871234', job: '4001234', product: 'LABEL ROLL 8.5x11', production: 'CUTTING', timeInStatus: '6:45', receipted: 0, orderQty: '1,500,000', jobStart: '04/01/26 08:30', jobFinish: '04/02/26 14:45', dueDate: '04/02/26 10:00', customer: 'Acme Corp', readyPercent: 45, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
-    { status: 'ON-TIME', cutoff: '2:00 PM', timeLeft: '3 hrs 45 mins', city: 'LONDON', delivery: '5874321', job: '4004321', product: 'CARDSTOCK 10x12', production: 'JOGGED', timeInStatus: '3:22', receipted: '100,000', orderQty: '95,000', jobStart: '03/31/26 10:15', jobFinish: '04/02/26 13:20', dueDate: '04/02/26 14:00', customer: 'PrintCo Inc', readyPercent: 100, truck: 'SHUTTLE-Q1', warehouse: 'EXTERNAL' },
-    { status: 'CAUTION', cutoff: '1:30 PM', timeLeft: '45 mins', city: 'ORLANDO', delivery: '5874312', job: '4004213', product: 'ENVELOPE PACK', production: 'PRINTED', timeInStatus: '1:10', receipted: 0, orderQty: '1,200,000', jobStart: '04/01/26 09:45', jobFinish: '04/02/26 12:30', dueDate: '04/02/26 13:30', customer: 'Global Solutions', readyPercent: 75, truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
-    { status: 'ON-TIME', cutoff: '4:00 PM', timeLeft: '4 hrs 45 mins', city: 'MARKHAM', delivery: '5879631', job: '4005126', product: 'BUSINESS CARDS', production: 'CUTTING', timeInStatus: '0:35', receipted: 0, orderQty: '30,000', jobStart: '04/02/26 07:00', jobFinish: '04/02/26 11:45', dueDate: '04/02/26 16:00', customer: 'NextGen Services', readyPercent: 100, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
-    { status: 'MOVED', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'BROOKLYN', delivery: '5873563', job: '4006589', product: 'POCKET FOLDER', production: 'CREOPLATE', timeInStatus: '8:15', receipted: 0, orderQty: '300,000', jobStart: '03/30/26 14:00', jobFinish: '04/01/26 16:30', dueDate: '04/01/26 10:00', customer: 'Elite Brands', readyPercent: 100, truck: 'SHIPPED', warehouse: 'MCC PLANT' },
-    { status: 'ON-TIME', cutoff: '3:15 PM', timeLeft: '3 hrs 20 mins', city: 'TORONTO', delivery: '5875432', job: '4003456', product: 'FLYERS 8.5x11', production: 'PRINTING', timeInStatus: '2:45', receipted: '50,000', orderQty: '500,000', jobStart: '03/31/26 11:30', jobFinish: '04/02/26 10:20', dueDate: '04/02/26 15:15', customer: 'Marketing Plus', readyPercent: 100, truck: 'SHUTTLE-Q1', warehouse: 'MCC PLANT' },
-    { status: 'CAUTION', cutoff: '12:30 PM', timeLeft: '25 mins', city: 'DETROIT', delivery: '5872109', job: '4002987', product: 'POSTCARDS 5x7', production: 'JOGGED', timeInStatus: '4:20', receipted: '125,000', orderQty: '250,000', jobStart: '04/01/26 13:00', jobFinish: '04/02/26 11:50', dueDate: '04/02/26 12:30', customer: 'Direct Mail Ltd', readyPercent: 60, truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
-    { status: 'ON-TIME', cutoff: '5:30 PM', timeLeft: '5 hrs 40 mins', city: 'CHICAGO', delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD', production: 'CUTTING', timeInStatus: '1:05', receipted: 0, orderQty: '150,000', jobStart: '04/02/26 06:45', jobFinish: '04/02/26 09:15', dueDate: '04/02/26 17:00', customer: 'ProPrint Group', readyPercent: 85, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' }
-  ];
 
   const dateStr = String(time.getMonth() + 1).padStart(2, '0') + '/' + String(time.getDate()).padStart(2, '0') + '/' + String(time.getFullYear()).slice(-2);
   const timeStr = String(time.getHours()).padStart(2, '0') + ':' + String(time.getMinutes()).padStart(2, '0') + ':' + String(time.getSeconds()).padStart(2, '0');
