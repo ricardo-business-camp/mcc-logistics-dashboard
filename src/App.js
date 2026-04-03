@@ -37,15 +37,23 @@ function App() {
     return '';
   };
 
+  const getReadyColor = (status) => {
+    if (status === 'LATE') return 'ready-late';
+    if (status === 'CAUTION') return 'ready-caution';
+    if (status === 'ON-TIME') return 'ready-ontime';
+    if (status === 'MOVED') return 'ready-moved';
+    return 'ready-ontime';
+  };
+
   const orders = [
-    { status: 'LATE', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'FREMONT', delivery: '5871234', job: '4001234', product: 'LABEL ROLL 8.5x11', production: 'CUTTING', timeInStatus: '6:45', receipted: 0, orderQty: '1,500,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
-    { status: 'ON-TIME', cutoff: '2:00 PM', timeLeft: '3 hrs 45 mins', city: 'LONDON', delivery: '5874321', job: '4004321', product: 'CARDSTOCK 10x12', production: 'JOGGED', timeInStatus: '3:22', receipted: '100,000', orderQty: '95,000', orderStatus: 'READY', truck: 'SHUTTLE-Q1', warehouse: 'EXTERNAL' },
-    { status: 'CAUTION', cutoff: '1:30 PM', timeLeft: '45 mins', city: 'ORLANDO', delivery: '5874312', job: '4004213', product: 'ENVELOPE PACK', production: 'PRINTED', timeInStatus: '1:10', receipted: 0, orderQty: '1,200,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
-    { status: 'ON-TIME', cutoff: '4:00 PM', timeLeft: '4 hrs 45 mins', city: 'MARKHAM', delivery: '5879631', job: '4005126', product: 'BUSINESS CARDS', production: 'CUTTING', timeInStatus: '0:35', receipted: 0, orderQty: '30,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
-    { status: 'MOVED', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'BROOKLYN', delivery: '5873563', job: '4006589', product: 'POCKET FOLDER', production: 'CREOPLATE', timeInStatus: '8:15', receipted: 0, orderQty: '300,000', orderStatus: 'NOT READY', truck: 'SHIPPED', warehouse: 'MCC PLANT' },
-    { status: 'ON-TIME', cutoff: '3:15 PM', timeLeft: '3 hrs 20 mins', city: 'TORONTO', delivery: '5875432', job: '4003456', product: 'FLYERS 8.5x11', production: 'PRINTING', timeInStatus: '2:45', receipted: '50,000', orderQty: '500,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q1', warehouse: 'MCC PLANT' },
-    { status: 'CAUTION', cutoff: '12:30 PM', timeLeft: '25 mins', city: 'DETROIT', delivery: '5872109', job: '4002987', product: 'POSTCARDS 5x7', production: 'JOGGED', timeInStatus: '4:20', receipted: '125,000', orderQty: '250,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
-    { status: 'ON-TIME', cutoff: '5:30 PM', timeLeft: '5 hrs 40 mins', city: 'CHICAGO', delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD', production: 'CUTTING', timeInStatus: '1:05', receipted: 0, orderQty: '150,000', orderStatus: 'NOT READY', truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' }
+    { status: 'LATE', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'FREMONT', delivery: '5871234', job: '4001234', product: 'LABEL ROLL 8.5x11', production: 'CUTTING', timeInStatus: '6:45', receipted: 0, orderQty: '1,500,000', jobStart: '04/01/26 08:30', jobFinish: '04/02/26 14:45', dueDate: '04/02/26 10:00', customer: 'Acme Corp', readyPercent: 45, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
+    { status: 'ON-TIME', cutoff: '2:00 PM', timeLeft: '3 hrs 45 mins', city: 'LONDON', delivery: '5874321', job: '4004321', product: 'CARDSTOCK 10x12', production: 'JOGGED', timeInStatus: '3:22', receipted: '100,000', orderQty: '95,000', jobStart: '03/31/26 10:15', jobFinish: '04/02/26 13:20', dueDate: '04/02/26 14:00', customer: 'PrintCo Inc', readyPercent: 100, truck: 'SHUTTLE-Q1', warehouse: 'EXTERNAL' },
+    { status: 'CAUTION', cutoff: '1:30 PM', timeLeft: '45 mins', city: 'ORLANDO', delivery: '5874312', job: '4004213', product: 'ENVELOPE PACK', production: 'PRINTED', timeInStatus: '1:10', receipted: 0, orderQty: '1,200,000', jobStart: '04/01/26 09:45', jobFinish: '04/02/26 12:30', dueDate: '04/02/26 13:30', customer: 'Global Solutions', readyPercent: 75, truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
+    { status: 'ON-TIME', cutoff: '4:00 PM', timeLeft: '4 hrs 45 mins', city: 'MARKHAM', delivery: '5879631', job: '4005126', product: 'BUSINESS CARDS', production: 'CUTTING', timeInStatus: '0:35', receipted: 0, orderQty: '30,000', jobStart: '04/02/26 07:00', jobFinish: '04/02/26 11:45', dueDate: '04/02/26 16:00', customer: 'NextGen Services', readyPercent: 100, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
+    { status: 'MOVED', cutoff: '10:00 AM', timeLeft: '-15 mins', city: 'BROOKLYN', delivery: '5873563', job: '4006589', product: 'POCKET FOLDER', production: 'CREOPLATE', timeInStatus: '8:15', receipted: 0, orderQty: '300,000', jobStart: '03/30/26 14:00', jobFinish: '04/01/26 16:30', dueDate: '04/01/26 10:00', customer: 'Elite Brands', readyPercent: 100, truck: 'SHIPPED', warehouse: 'MCC PLANT' },
+    { status: 'ON-TIME', cutoff: '3:15 PM', timeLeft: '3 hrs 20 mins', city: 'TORONTO', delivery: '5875432', job: '4003456', product: 'FLYERS 8.5x11', production: 'PRINTING', timeInStatus: '2:45', receipted: '50,000', orderQty: '500,000', jobStart: '03/31/26 11:30', jobFinish: '04/02/26 10:20', dueDate: '04/02/26 15:15', customer: 'Marketing Plus', readyPercent: 100, truck: 'SHUTTLE-Q1', warehouse: 'MCC PLANT' },
+    { status: 'CAUTION', cutoff: '12:30 PM', timeLeft: '25 mins', city: 'DETROIT', delivery: '5872109', job: '4002987', product: 'POSTCARDS 5x7', production: 'JOGGED', timeInStatus: '4:20', receipted: '125,000', orderQty: '250,000', jobStart: '04/01/26 13:00', jobFinish: '04/02/26 11:50', dueDate: '04/02/26 12:30', customer: 'Direct Mail Ltd', readyPercent: 60, truck: 'SHUTTLE-Q2', warehouse: 'EXTERNAL' },
+    { status: 'ON-TIME', cutoff: '5:30 PM', timeLeft: '5 hrs 40 mins', city: 'CHICAGO', delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD', production: 'CUTTING', timeInStatus: '1:05', receipted: 0, orderQty: '150,000', jobStart: '04/02/26 06:45', jobFinish: '04/02/26 09:15', dueDate: '04/02/26 17:00', customer: 'ProPrint Group', readyPercent: 85, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' }
   ];
 
   const dateStr = String(time.getMonth() + 1).padStart(2, '0') + '/' + String(time.getDate()).padStart(2, '0') + '/' + String(time.getFullYear()).slice(-2);
@@ -95,6 +103,10 @@ function App() {
               <th>TIME</th>
               <th>RECEIPTED</th>
               <th>ORDER QTY</th>
+              <th>JOB START</th>
+              <th>JOB FINISH</th>
+              <th>DUE DATE</th>
+              <th>CUSTOMER</th>
               <th>READY</th>
               <th>TRUCK</th>
               <th>WAREHOUSE</th>
@@ -115,7 +127,11 @@ function App() {
                   <td>{order.timeInStatus}</td>
                   <td>{order.receipted}</td>
                   <td>{order.orderQty}</td>
-                  <td><div className="progress-bar"><div className="progress-fill green" style={{width: '45%'}}></div></div></td>
+                  <td>{order.jobStart}</td>
+                  <td>{order.jobFinish}</td>
+                  <td>{order.dueDate}</td>
+                  <td>{order.customer}</td>
+                  <td><div className={`ready-block ${getReadyColor(order.status)}`}></div></td>
                   <td>{order.truck}</td>
                   <td>{order.warehouse}</td>
                 </tr>
