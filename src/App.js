@@ -10,7 +10,7 @@ function App() {
     nextCutoff: '2:00 PM'
   });
 
-  const productionStatuses = ['CUTTING', 'JOGGED', 'PRINTING', 'Creoplateing', 'PRINTING', 'Die-cutting', 'Reconciling'];
+  const productionStatuses = ['CUTTING', 'JOGGED', 'PRINTING', 'Creoplateing', 'Die-cutting', 'Reconciling'];
 
   const getRandomProduction = () => {
     return productionStatuses[Math.floor(Math.random() * productionStatuses.length)];
@@ -27,7 +27,6 @@ function App() {
     { status: 'ON-TIME', cutoff: '5:30 PM', timeLeft: '5 hrs 40 mins', city: 'CHICAGO', delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD', production: 'Die-cutting', timeInStatus: '1:05', receipted: 0, orderQty: '150,000', jobStart: '04/02/26 6:45 AM', jobFinish: '04/02/26 9:15 AM', dueDate: '04/02/26 5:30 PM', customer: 'ProPrint Group', readyPercent: 85, truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' }
   ]);
 
-  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
@@ -35,7 +34,6 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Update metrics every 30 seconds
   useEffect(() => {
     const refreshTimer = setInterval(() => {
       setMetrics(prev => ({
@@ -48,7 +46,6 @@ function App() {
     return () => clearInterval(refreshTimer);
   }, []);
 
-  // REFRESH THE TABLE DATA EVERY 30 SECONDS (includes production status)
   useEffect(() => {
     const tableRefreshTimer = setInterval(() => {
       setOrders(prevOrders => 
