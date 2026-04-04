@@ -76,13 +76,21 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Full dashboard refresh every 30 seconds — single setState call so every
-  // metric card and every table row update in the same React render pass.
-  // generateData() seeds from the wall-clock 30-second window so every device
-  // open at the same time produces the exact same numbers.
+  // Full dashboard refresh — aligned to wall-clock 30-second boundaries so
+  // every device (phone, laptop, TV) fires at the same absolute moment and
+  // generateData() therefore uses the same seed → identical numbers everywhere.
   useEffect(() => {
-    const refreshTimer = setInterval(() => setDashboard(generateData()), 30000);
-    return () => clearInterval(refreshTimer);
+    let refreshTimer;
+    // Wait until the next 0s or 30s mark on the wall clock, then lock in
+    const msUntilNext = 30000 - (Date.now() % 30000);
+    const alignTimer = setTimeout(() => {
+      setDashboard(generateData());
+      refreshTimer = setInterval(() => setDashboard(generateData()), 30000);
+    }, msUntilNext);
+    return () => {
+      clearTimeout(alignTimer);
+      clearInterval(refreshTimer);
+    };
   }, []);
 
   const getStatusClass = (status) => {
