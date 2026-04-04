@@ -1,13 +1,15 @@
+/* ── Reset ───────────────────────────────────────────────────────────────── */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* No outer page scroll on any device — dashboard fills the full screen */
 html, body, #root {
   width: 100%;
   height: 100%;
-  min-height: 100vh;
+  overflow: hidden;
   background-color: #1a1a1a;
   color: #fff;
   font-family: Arial, sans-serif;
@@ -15,91 +17,97 @@ html, body, #root {
   padding: 0;
 }
 
+/* ── Dashboard shell ─────────────────────────────────────────────────────── */
+/* Exactly 100vh tall, flex column. Each section is fixed-size except the
+   table section which stretches to fill whatever space remains. */
 .dashboard {
   background-color: #1a1a1a;
-  width: 100%;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
+  overflow: hidden;
 }
 
+/* ── Header ──────────────────────────────────────────────────────────────── */
 .dashboard-header {
-  padding: 20px;
+  flex-shrink: 0;
+  padding: clamp(8px, 1.4vw, 28px) clamp(12px, 2vw, 32px);
   border-bottom: 3px solid #00cc00;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: clamp(6px, 0.8vw, 14px);
 }
 
 .dashboard-header h1 {
-  font-size: 32px;
+  /* Scales from 13 px (tiny phone) → 48 px (4K TV) */
+  font-size: clamp(13px, 2.2vw, 48px);
   color: #00cc00;
   font-weight: bold;
 }
 
 .header-info {
   display: flex;
-  gap: 15px;
+  gap: clamp(6px, 1vw, 15px);
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .date {
-  font-size: 12px;
+  font-size: clamp(10px, 1vw, 18px);
   color: #00cc00;
 }
 
 .status {
-  font-size: 11px;
+  font-size: clamp(9px, 0.85vw, 15px);
   background-color: #006600;
   color: #00cc00;
-  padding: 4px 8px;
+  padding: clamp(2px, 0.3vw, 6px) clamp(4px, 0.7vw, 12px);
   border-radius: 3px;
 }
 
+/* ── Metrics ─────────────────────────────────────────────────────────────── */
 .metrics-section {
+  flex-shrink: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 20px;
-  width: 100%;
+  gap: clamp(8px, 1.2vw, 24px);
+  padding: clamp(8px, 1.2vw, 24px) clamp(12px, 2vw, 32px);
 }
 
 .metric-card {
   background-color: #2a2a2a;
   border-left: 5px solid #00cc00;
-  padding: 20px;
+  padding: clamp(8px, 1.2vw, 24px);
   text-align: center;
 }
 
 .metric-label {
-  font-size: 11px;
+  font-size: clamp(8px, 0.7vw, 15px);
   color: #888;
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: clamp(4px, 0.5vw, 12px);
 }
 
 .metric-value {
-  font-size: 40px;
+  /* Big readable number: 20 px on phone, scales up to 64 px on TV */
+  font-size: clamp(20px, 3vw, 64px);
   color: #00cc00;
   font-weight: bold;
 }
 
-.metric-value.metric-green {
-  color: #00cc00;
-}
+.metric-value.metric-green { color: #00cc00; }
+.metric-value.metric-red   { color: #ff3333; }
 
-.metric-value.metric-red {
-  color: #ff3333;
-}
-
+/* ── Table section ───────────────────────────────────────────────────────── */
+/* flex: 1 + min-height: 0 = fills all remaining vertical space and allows
+   internal scrolling if the table content is taller or wider than the box. */
 .table-section {
   flex: 1;
-  padding: 20px;
+  min-height: 0;
+  padding: clamp(6px, 0.8vw, 18px) clamp(12px, 2vw, 32px);
   overflow: auto;
 }
 
@@ -112,427 +120,124 @@ html, body, #root {
   background-color: #2a2a2a;
   position: sticky;
   top: 0;
+  z-index: 1;
 }
 
 .shipping-table th {
-  padding: 12px;
+  padding: clamp(4px, 0.65vw, 14px) clamp(5px, 0.75vw, 13px);
   text-align: left;
-  font-size: 11px;
+  font-size: clamp(9px, 0.78vw, 14px);
   color: #00cc00;
   border-bottom: 2px solid #00cc00;
   white-space: nowrap;
 }
 
 .shipping-table td {
-  padding: 12px;
-  font-size: 12px;
+  padding: clamp(4px, 0.65vw, 14px) clamp(5px, 0.75vw, 13px);
+  font-size: clamp(9px, 0.82vw, 14px);
   border-bottom: 1px solid #333;
+  white-space: nowrap;
 }
 
-.status-late {
-  animation: flashLate 0.8s infinite;
-}
-
-.status-caution {
-  animation: flashCaution 1s infinite;
-}
-
-.status-ontime {
-  background-color: rgba(0, 200, 0, 0.1);
-}
-
-.status-moved {
-  background-color: rgba(100, 100, 100, 0.1);
-}
+/* ── Row status styles ───────────────────────────────────────────────────── */
+.status-late    { animation: flashLate 0.8s infinite; }
+.status-caution { animation: flashCaution 1s infinite; }
+.status-ontime  { background-color: rgba(0, 200, 0, 0.1); }
+.status-moved   { background-color: rgba(100, 100, 100, 0.1); }
 
 @keyframes flashLate {
   0%, 100% { background-color: #5a2a2a; }
-  50% { background-color: #ff3333; }
+  50%       { background-color: #ff3333; }
 }
 
 @keyframes flashCaution {
   0%, 100% { background-color: #5a5a2a; }
-  50% { background-color: #ffcc00; }
+  50%       { background-color: #ffcc00; }
 }
 
 @keyframes flashBadge {
   0%, 100% { background-color: #ffcc00; color: #000; }
-  50% { background-color: #ff9900; color: #fff; }
+  50%       { background-color: #ff9900; color: #fff; }
 }
 
 .status-badge {
   display: inline-block;
-  padding: 4px 8px;
+  padding: clamp(2px, 0.3vw, 6px) clamp(3px, 0.55vw, 10px);
   border-radius: 3px;
   font-weight: bold;
-  font-size: 11px;
+  font-size: clamp(8px, 0.72vw, 13px);
   text-transform: uppercase;
 }
 
-.status-late .status-badge {
-  background-color: #ff3333;
-  color: #fff;
-}
+.status-late    .status-badge { background-color: #ff3333; color: #fff; }
+.status-caution .status-badge { animation: flashBadge 1s infinite; }
+.status-ontime  .status-badge { background-color: #00cc00; color: #000; }
+.status-moved   .status-badge { background-color: #666;    color: #fff; }
 
-.status-caution .status-badge {
-  animation: flashBadge 1s infinite;
-}
-
-.status-ontime .status-badge {
-  background-color: #00cc00;
-  color: #000;
-}
-
-.status-moved .status-badge {
-  background-color: #666;
-  color: #fff;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 18px;
-  background-color: #333;
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 4px;
-}
-
-.progress-fill {
-  height: 100%;
-  background-color: #00cc00;
-}
-
-.progress-fill.green {
-  background-color: #00cc00;
-}
-
-/* READY BLOCK COLORS - Based on Status */
+/* ── Ready block ─────────────────────────────────────────────────────────── */
 .ready-block {
   display: inline-block;
-  width: 30px;
-  height: 30px;
+  width:  clamp(14px, 1.6vw, 36px);
+  height: clamp(14px, 1.6vw, 36px);
   border-radius: 4px;
   background-color: #00cc00;
 }
 
-.ready-block.ready-late {
-  background-color: #ff3333;
-}
+.ready-block.ready-late    { background-color: #ff3333; }
+.ready-block.ready-caution { background-color: #ffcc00; }
+.ready-block.ready-ontime  { background-color: #00cc00; }
+.ready-block.ready-moved   { background-color: #666666; }
 
-.ready-block.ready-caution {
-  background-color: #ffcc00;
-}
-
-.ready-block.ready-ontime {
-  background-color: #00cc00;
-}
-
-.ready-block.ready-moved {
-  background-color: #666666;
-}
-
+/* ── Footer ──────────────────────────────────────────────────────────────── */
 .dashboard-footer {
+  flex-shrink: 0;
   background-color: #1a1a1a;
   border-top: 3px solid #00cc00;
-  padding: 12px 20px;
-  width: 100%;
-  margin: 0;
-  margin-top: 20px;
+  padding: clamp(5px, 0.65vw, 14px) clamp(12px, 2vw, 32px);
 }
 
 .footer-status {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: clamp(4px, 0.65vw, 10px);
   justify-content: center;
 }
 
 .status-item {
   display: inline-block;
-  font-size: 12px;
+  font-size: clamp(8px, 0.72vw, 14px);
   background-color: #2a2a2a;
-  padding: 8px 12px;
+  padding: clamp(3px, 0.45vw, 9px) clamp(6px, 0.85vw, 16px);
   border-left: 3px solid #666;
   border-radius: 4px;
   white-space: nowrap;
   font-weight: bold;
 }
 
-/* STATUS INDICATOR COLORS */
-.status-item.status-ontime {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-.status-item.status-caution {
-  color: #ffcc00;
-  border-left: 3px solid #ffcc00;
-}
-
-.status-item.status-critical {
-  color: #ff3333;
-  border-left: 3px solid #ff3333;
-  animation: pulse 1s infinite;
-}
-
-.status-item.status-moved {
-  color: #888;
-  border-left: 3px solid #666;
-}
-
-.status-item.status-webhook {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-.status-item.status-warehouse {
-  color: #ffcc00;
-  border-left: 3px solid #ffcc00;
-}
-
-.status-item.status-refresh {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
-
-.status-item.status-external {
-  color: #00cc00;
-  border-left: 3px solid #00cc00;
-}
+/* Status item colours */
+.status-item.status-ontime   { color: #00cc00; border-left-color: #00cc00; }
+.status-item.status-caution  { color: #ffcc00; border-left-color: #ffcc00; }
+.status-item.status-critical { color: #ff3333; border-left-color: #ff3333; animation: pulse 1s infinite; }
+.status-item.status-moved    { color: #888;    border-left-color: #666; }
+.status-item.status-webhook  { color: #00cc00; border-left-color: #00cc00; }
+.status-item.status-warehouse{ color: #ffcc00; border-left-color: #ffcc00; }
+.status-item.status-refresh  { color: #00cc00; border-left-color: #00cc00; }
+.status-item.status-external { color: #00cc00; border-left-color: #00cc00; }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
+  0%, 100% { opacity: 1;   }
+  50%       { opacity: 0.6; }
 }
 
-/* ===== TV / LARGE MONITOR (1920px+) ===== */
-@media (min-width: 1920px) {
-  .dashboard-header {
-    padding: 28px 32px;
-  }
-
-  .dashboard-header h1 {
-    font-size: 52px;
-  }
-
-  .date {
-    font-size: 18px;
-  }
-
-  .status {
-    font-size: 16px;
-    padding: 6px 12px;
-  }
-
-  .metrics-section {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 28px;
-    padding: 28px 32px;
-  }
-
-  .metric-card {
-    padding: 28px;
-  }
-
-  .metric-label {
-    font-size: 16px;
-    margin-bottom: 14px;
-  }
-
-  .metric-value {
-    font-size: 72px;
-  }
-
-  .table-section {
-    padding: 20px 32px;
-  }
-
-  .shipping-table th {
-    padding: 16px;
-    font-size: 14px;
-  }
-
-  .shipping-table td {
-    padding: 16px;
-    font-size: 15px;
-  }
-
-  .status-badge {
-    font-size: 13px;
-    padding: 6px 12px;
-  }
-
-  .ready-block {
-    width: 40px;
-    height: 40px;
-  }
-
-  .dashboard-footer {
-    padding: 16px 32px;
-  }
-
-  .status-item {
-    font-size: 15px;
-    padding: 10px 18px;
-  }
-}
-
-/* ===== LARGE DESKTOP (1440px – 1919px) ===== */
-@media (min-width: 1440px) and (max-width: 1919px) {
-  .dashboard-header h1 {
-    font-size: 40px;
-  }
-
-  .metrics-section {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    padding: 24px;
-  }
-
-  .metric-value {
-    font-size: 52px;
-  }
-
-  .metric-label {
-    font-size: 13px;
-  }
-
-  .shipping-table th {
-    font-size: 12px;
-    padding: 14px;
-  }
-
-  .shipping-table td {
-    font-size: 13px;
-    padding: 14px;
-  }
-
-  .status-item {
-    font-size: 13px;
-  }
-}
-
-/* ===== DESKTOP / LAPTOP (1024px – 1439px) ===== */
-/* Default styles above already target this range — no overrides needed */
-
-/* ===== TABLET LANDSCAPE / SMALL LAPTOP (768px – 1023px) ===== */
-@media (max-width: 1023px) {
-  .metrics-section {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* ===== TABLET PORTRAIT / LARGE MOBILE (481px – 767px) ===== */
-@media (max-width: 767px) {
+/* ── Mobile: stack header + 2-column metrics ─────────────────────────────── */
+/* Only layout changes at small widths — all sizes still use clamp() above   */
+@media (max-width: 600px) {
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .dashboard-header h1 {
-    font-size: 20px;
-  }
-
   .metrics-section {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 15px;
-  }
-
-  .metric-card {
-    padding: 12px;
-  }
-
-  .metric-value {
-    font-size: 26px;
-  }
-
-  .table-section {
-    padding: 15px;
-  }
-
-  .shipping-table th,
-  .shipping-table td {
-    padding: 8px;
-    font-size: 10px;
-  }
-
-  .dashboard-footer {
-    padding: 10px 15px;
-    margin-top: 15px;
-  }
-
-  .status-item {
-    font-size: 10px;
-    padding: 6px 8px;
-  }
-
-  .ready-block {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-/* ===== MOBILE (320px – 480px) ===== */
-@media (max-width: 480px) {
-  .dashboard-header {
-    padding: 10px;
-  }
-
-  .dashboard-header h1 {
-    font-size: 13px;
-  }
-
-  .metrics-section {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    padding: 10px;
-  }
-
-  .metric-card {
-    padding: 8px;
-  }
-
-  .metric-value {
-    font-size: 20px;
-  }
-
-  .metric-label {
-    font-size: 8px;
-  }
-
-  .table-section {
-    padding: 10px;
-  }
-
-  .shipping-table th,
-  .shipping-table td {
-    padding: 6px;
-    font-size: 9px;
-  }
-
-  .dashboard-footer {
-    padding: 8px 10px;
-    margin-top: 10px;
-  }
-
-  .footer-status {
-    gap: 6px;
-    overflow-x: auto;
-  }
-
-  .status-item {
-    font-size: 8px;
-    padding: 4px 6px;
-    flex-shrink: 0;
-  }
-
-  .ready-block {
-    width: 20px;
-    height: 20px;
   }
 }
