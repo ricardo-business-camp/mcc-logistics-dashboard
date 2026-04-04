@@ -29,33 +29,24 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const productionStatuses = ['CUTTING', 'JOGGED', 'PRINTING', 'CREOPLATEING', 'DIECUTTING', 'RECONCILING'];
+
     const refreshTimer = setInterval(() => {
-      setMetrics(prev => ({
+      setMetrics({
         linesToday: Math.floor(Math.random() * 50) + 260,
         ontimePercent: Math.floor(Math.random() * 20) + 75,
         atRisk: Math.floor(Math.random() * 10) + 2,
         nextCutoff: '2:00 PM'
-      }));
-    }, 30000);
-    return () => clearInterval(refreshTimer);
-  }, []);
-
-  useEffect(() => {
-    const productionStatuses = ['CUTTING', 'JOGGED', 'PRINTING', 'CREOPLATEING', 'DIECUTTING', 'RECONCILING'];
-    
-    const tableRefreshTimer = setInterval(() => {
-      setOrders(prevOrders => 
-        prevOrders.map(order => {
-          const randomProduction = productionStatuses[Math.floor(Math.random() * productionStatuses.length)];
-          return {
-            ...order,
-            readyPercent: Math.floor(Math.random() * 100) + 1,
-            production: randomProduction
-          };
-        })
+      });
+      setOrders(prevOrders =>
+        prevOrders.map(order => ({
+          ...order,
+          readyPercent: Math.floor(Math.random() * 100) + 1,
+          production: productionStatuses[Math.floor(Math.random() * productionStatuses.length)]
+        }))
       );
     }, 30000);
-    return () => clearInterval(tableRefreshTimer);
+    return () => clearInterval(refreshTimer);
   }, []);
 
   const getStatusClass = (status) => {

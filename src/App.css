@@ -7,6 +7,7 @@
 html, body, #root {
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   background-color: #1a1a1a;
   color: #fff;
   font-family: Arial, sans-serif;
@@ -17,6 +18,7 @@ html, body, #root {
 .dashboard {
   background-color: #1a1a1a;
   width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
@@ -96,8 +98,9 @@ html, body, #root {
 }
 
 .table-section {
+  flex: 1;
   padding: 20px;
-  overflow-x: auto;
+  overflow: auto;
 }
 
 .shipping-table {
@@ -306,20 +309,132 @@ html, body, #root {
   }
 }
 
-@media (max-width: 1199px) {
+/* ===== TV / LARGE MONITOR (1920px+) ===== */
+@media (min-width: 1920px) {
+  .dashboard-header {
+    padding: 28px 32px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 52px;
+  }
+
+  .date {
+    font-size: 18px;
+  }
+
+  .status {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+
+  .metrics-section {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    padding: 28px 32px;
+  }
+
+  .metric-card {
+    padding: 28px;
+  }
+
+  .metric-label {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .metric-value {
+    font-size: 72px;
+  }
+
+  .table-section {
+    padding: 20px 32px;
+  }
+
+  .shipping-table th {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  .shipping-table td {
+    padding: 16px;
+    font-size: 15px;
+  }
+
+  .status-badge {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .ready-block {
+    width: 40px;
+    height: 40px;
+  }
+
+  .dashboard-footer {
+    padding: 16px 32px;
+  }
+
+  .status-item {
+    font-size: 15px;
+    padding: 10px 18px;
+  }
+}
+
+/* ===== LARGE DESKTOP (1440px – 1919px) ===== */
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .dashboard-header h1 {
+    font-size: 40px;
+  }
+
+  .metrics-section {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .metric-value {
+    font-size: 52px;
+  }
+
+  .metric-label {
+    font-size: 13px;
+  }
+
+  .shipping-table th {
+    font-size: 12px;
+    padding: 14px;
+  }
+
+  .shipping-table td {
+    font-size: 13px;
+    padding: 14px;
+  }
+
+  .status-item {
+    font-size: 13px;
+  }
+}
+
+/* ===== DESKTOP / LAPTOP (1024px – 1439px) ===== */
+/* Default styles above already target this range — no overrides needed */
+
+/* ===== TABLET LANDSCAPE / SMALL LAPTOP (768px – 1023px) ===== */
+@media (max-width: 1023px) {
   .metrics-section {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 768px) {
+/* ===== TABLET PORTRAIT / LARGE MOBILE (481px – 767px) ===== */
+@media (max-width: 767px) {
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .dashboard-header h1 {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .metrics-section {
@@ -333,7 +448,7 @@ html, body, #root {
   }
 
   .metric-value {
-    font-size: 24px;
+    font-size: 26px;
   }
 
   .table-section {
@@ -362,13 +477,14 @@ html, body, #root {
   }
 }
 
+/* ===== MOBILE (320px – 480px) ===== */
 @media (max-width: 480px) {
   .dashboard-header {
     padding: 10px;
   }
 
   .dashboard-header h1 {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .metrics-section {
@@ -382,7 +498,7 @@ html, body, #root {
   }
 
   .metric-value {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .metric-label {
