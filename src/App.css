@@ -18,12 +18,14 @@ html, body, #root {
 }
 
 /* ── Dashboard shell ─────────────────────────────────────────────────────── */
-/* Exactly 100vh tall, flex column. Each section is fixed-size except the
-   table section which stretches to fill whatever space remains. */
+/* dvh = "dynamic viewport height" — excludes the mobile browser's address bar
+   and bottom nav chrome, so the dashboard truly fills the visible screen.
+   100vh is kept as a fallback for very old browsers. */
 .dashboard {
   background-color: #1a1a1a;
   width: 100vw;
-  height: 100vh;
+  height: 100vh;       /* fallback */
+  height: 100dvh;      /* mobile-aware: excludes browser chrome */
   display: flex;
   flex-direction: column;
   overflow: hidden;

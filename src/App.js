@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 // ─── Seeded PRNG ────────────────────────────────────────────────────────────
@@ -52,18 +52,34 @@ function generateData() {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 function App() {
-  const [time, setTime] = useState(new Date());
   const [{ metrics, orders }, setDashboard] = useState(generateData);
 
-  // Live clock — updates every second
+  // Clock uses a ref so it updates the DOM directly every second WITHOUT
+  // triggering a React re-render. This means the only React re-render that
+  // ever happens is the full simultaneous 30-second data refresh — no more
+  // "half the dashboard updating faster" appearance.
+  const clockRef = useRef(null);
   useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000);
+    const tick = () => {
+      if (!clockRef.current) return;
+      const now = new Date();
+      const d = String(now.getMonth() + 1).padStart(2, '0') + '/' +
+                String(now.getDate()).padStart(2, '0') + '/' +
+                String(now.getFullYear()).slice(-2);
+      const t = String(now.getHours()).padStart(2, '0') + ':' +
+                String(now.getMinutes()).padStart(2, '0') + ':' +
+                String(now.getSeconds()).padStart(2, '0');
+      clockRef.current.textContent = `Date: ${d} | Time: ${t}`;
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // Full dashboard refresh every 30 seconds.
-  // Because generateData() seeds from wall-clock time, every device that fires
-  // this interval in the same 30-second window produces the exact same numbers.
+  // Full dashboard refresh every 30 seconds — single setState call so every
+  // metric card and every table row update in the same React render pass.
+  // generateData() seeds from the wall-clock 30-second window so every device
+  // open at the same time produces the exact same numbers.
   useEffect(() => {
     const refreshTimer = setInterval(() => setDashboard(generateData()), 30000);
     return () => clearInterval(refreshTimer);
@@ -85,19 +101,12 @@ function App() {
     return 'ready-ontime';
   };
 
-  const dateStr = String(time.getMonth() + 1).padStart(2, '0') + '/' +
-                  String(time.getDate()).padStart(2, '0') + '/' +
-                  String(time.getFullYear()).slice(-2);
-  const timeStr = String(time.getHours()).padStart(2, '0') + ':' +
-                  String(time.getMinutes()).padStart(2, '0') + ':' +
-                  String(time.getSeconds()).padStart(2, '0');
-
   return (
     <div className="dashboard">
       <div className="dashboard-header">
         <h1>MCC LOGISTICS COMMAND CENTRE</h1>
         <div className="header-info">
-          <span className="date">Date: {dateStr} | Time: {timeStr}</span>
+          <span className="date" ref={clockRef}></span>
           <span className="status">Connection Note: Using mock data</span>
         </div>
       </div>
