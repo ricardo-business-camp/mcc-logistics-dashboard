@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
-// ─── Seeded PRNG ────────────────────────────────────────────────────────────
-// Same seed → identical sequence on every device / browser tab.
-// We seed from the current 30-second wall-clock window so all devices that
-// are open at the same time automatically compute the same numbers.
+// ─── Seeded PRNG (used only as a local fallback when the API is unavailable) ─
 function createRng(seed) {
   let s = seed >>> 0;
   return () => {
@@ -13,9 +10,9 @@ function createRng(seed) {
   };
 }
 
-// ─── Static order data (fields that never change between refreshes) ──────────
 const PRODUCTION_STATUSES = ['CUTTING', 'JOGGED', 'PRINTING', 'CREOPLATEING', 'DIECUTTING', 'RECONCILING'];
 
+// ─── Static order rows (fields that never change between refreshes) ──────────
 const BASE_ORDERS = [
   { status: 'LATE',    cutoff: '10:00 AM', timeLeft: '-15 mins',      city: 'FREMONT',  delivery: '5871234', job: '4001234', product: 'LABEL ROLL 8.5x11',  timeInStatus: '6:45', receipted: 0,         orderQty: '1,500,000', jobStart: '04/01/26 8:30 AM',  jobFinish: '04/02/26 2:45 PM',  dueDate: '04/02/26 10:00 AM', customer: 'Acme Corp',        truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
   { status: 'ON-TIME', cutoff: '2:00 PM',  timeLeft: '3 hrs 45 mins', city: 'LONDON',   delivery: '5874321', job: '4004321', product: 'CARDSTOCK 10x12',     timeInStatus: '3:22', receipted: '100,000', orderQty: '95,000',    jobStart: '03/31/26 10:15 AM', jobFinish: '04/02/26 1:20 PM',  dueDate: '04/02/26 2:00 PM',  customer: 'PrintCo Inc',      truck: 'SHUTTLE-Q1', warehouse: 'EXTERNAL'   },
@@ -27,37 +24,51 @@ const BASE_ORDERS = [
   { status: 'ON-TIME', cutoff: '5:30 PM',  timeLeft: '5 hrs 40 mins', city: 'CHICAGO',  delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD',  timeInStatus: '1:05', receipted: 0,         orderQty: '150,000',   jobStart: '04/02/26 6:45 AM',  jobFinish: '04/02/26 9:15 AM',  dueDate: '04/02/26 5:30 PM',  customer: 'ProPrint Group',   truck: 'SHUTTLE-Q3', warehouse: 'MCC PLANT' },
 ];
 
-// ─── Data generator ──────────────────────────────────────────────────────────
-// Seeds from the current 30-second window timestamp so every device open at
-// the same time computes identical metrics and production values.
-function generateData() {
+// ─── Merge server response with static order rows ────────────────────────────
+function buildDashboard(metrics, orderUpdates) {
+  return {
+    metrics,
+    orders: BASE_ORDERS.map((order, i) => ({ ...order, ...orderUpdates[i] })),
+  };
+}
+
+// ─── Client-side fallback (used only when the API is unreachable) ────────────
+function generateFallback() {
   const seed = Math.floor(Date.now() / 30000);
   const rng  = createRng(seed);
-
   const metrics = {
     linesToday:    Math.floor(rng() * 50) + 260,
     ontimePercent: Math.floor(rng() * 20) + 75,
     atRisk:        Math.floor(rng() * 10) + 2,
     nextCutoff:    '2:00 PM',
   };
-
-  const orders = BASE_ORDERS.map(order => ({
-    ...order,
+  const orderUpdates = Array.from({ length: 8 }, () => ({
     readyPercent: Math.floor(rng() * 100) + 1,
     production:   PRODUCTION_STATUSES[Math.floor(rng() * PRODUCTION_STATUSES.length)],
   }));
+  return buildDashboard(metrics, orderUpdates);
+}
 
-  return { metrics, orders };
+// ─── Fetch from the Vercel serverless API ────────────────────────────────────
+async function fetchFromServer() {
+  try {
+    const res = await fetch('/api/data');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const { metrics, orderUpdates, msUntilNext } = await res.json();
+    return { dashboard: buildDashboard(metrics, orderUpdates), msUntilNext };
+  } catch {
+    // API not reachable (e.g. local dev without Vercel CLI) — use fallback
+    const msUntilNext = 30000 - (Date.now() % 30000);
+    return { dashboard: generateFallback(), msUntilNext };
+  }
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
 function App() {
-  const [{ metrics, orders }, setDashboard] = useState(generateData);
+  const [{ metrics, orders }, setDashboard] = useState(generateFallback);
 
-  // Clock uses a ref so it updates the DOM directly every second WITHOUT
-  // triggering a React re-render. This means the only React re-render that
-  // ever happens is the full simultaneous 30-second data refresh — no more
-  // "half the dashboard updating faster" appearance.
+  // Clock: direct DOM write every second — never triggers a React re-render,
+  // so the only re-render is the full simultaneous data refresh below.
   const clockRef = useRef(null);
   useEffect(() => {
     const tick = () => {
@@ -76,21 +87,27 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Full dashboard refresh — aligned to wall-clock 30-second boundaries so
-  // every device (phone, laptop, TV) fires at the same absolute moment and
-  // generateData() therefore uses the same seed → identical numbers everywhere.
+  // Data refresh: fetch from server so ALL devices receive the same numbers.
+  // The server returns msUntilNext — exactly how many ms until the next
+  // 30-second window — so we schedule the next fetch with zero drift.
   useEffect(() => {
-    let refreshTimer;
-    // Wait until the next 0s or 30s mark on the wall clock, then lock in
-    const msUntilNext = 30000 - (Date.now() % 30000);
-    const alignTimer = setTimeout(() => {
-      setDashboard(generateData());
-      refreshTimer = setInterval(() => setDashboard(generateData()), 30000);
-    }, msUntilNext);
-    return () => {
-      clearTimeout(alignTimer);
-      clearInterval(refreshTimer);
-    };
+    let nextTimer;
+
+    function scheduleRefresh(msUntilNext) {
+      nextTimer = setTimeout(async () => {
+        const { dashboard, msUntilNext: nextMs } = await fetchFromServer();
+        setDashboard(dashboard);          // single setState → one render pass
+        scheduleRefresh(nextMs);          // chain to next boundary
+      }, msUntilNext);
+    }
+
+    // Fetch immediately on mount, then chain refreshes at exact boundaries
+    fetchFromServer().then(({ dashboard, msUntilNext }) => {
+      setDashboard(dashboard);
+      scheduleRefresh(msUntilNext);
+    });
+
+    return () => clearTimeout(nextTimer);
   }, []);
 
   const getStatusClass = (status) => {
