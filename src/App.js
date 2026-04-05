@@ -19,14 +19,14 @@ const PRODUCTION_STATUSES = [
 // Fields that never change on refresh. Dynamic fields (production,
 // receipted) come from the server and are merged in buildDashboard().
 const BASE_ORDERS = [
-  { status: 'LATE',    cutoffH: 10, cutoffM: 0,  cutoffLabel: '10:00 AM', city: 'FREMONT',  delivery: '5871234', job: '4001234', timeInStatus: '6:45',  orderQty: 1500000, truck: 'SHUTTLE-Q3' },
-  { status: 'ON TIME', cutoffH: 14, cutoffM: 0,  cutoffLabel: '2:00 PM',  city: 'LONDON',   delivery: '5874321', job: '4004321', timeInStatus: '3:22',  orderQty: 95000,   truck: 'SHIPPED'    },
-  { status: 'DELAYED', cutoffH: 14, cutoffM: 0,  cutoffLabel: '2:00 PM',  city: 'ORLANDO',  delivery: '5874312', job: '4004213', timeInStatus: '11:52', orderQty: 205000,  truck: ''           },
-  { status: 'ON TIME', cutoffH: 16, cutoffM: 0,  cutoffLabel: '4:00 PM',  city: 'MARKHAM',  delivery: '5879631', job: '4005126', timeInStatus: '0:35',  orderQty: 30000,   truck: ''           },
-  { status: 'MOVED',   cutoffH: 10, cutoffM: 0,  cutoffLabel: '10:00 AM', city: 'BROOKLYN', delivery: '5873563', job: '4006589', timeInStatus: '8:15',  orderQty: 300000,  truck: ''           },
-  { status: 'ON TIME', cutoffH: 15, cutoffM: 15, cutoffLabel: '3:15 PM',  city: 'TORONTO',  delivery: '5875432', job: '4003456', timeInStatus: '2:45',  orderQty: 500000,  truck: 'SHUTTLE-Q1' },
-  { status: 'DELAYED', cutoffH: 12, cutoffM: 30, cutoffLabel: '12:30 PM', city: 'DETROIT',  delivery: '5872109', job: '4002987', timeInStatus: '4:20',  orderQty: 250000,  truck: 'SHUTTLE-Q2' },
-  { status: 'ON TIME', cutoffH: 17, cutoffM: 30, cutoffLabel: '5:30 PM',  city: 'CHICAGO',  delivery: '5876543', job: '4007654', timeInStatus: '1:05',  orderQty: 150000,  truck: 'SHUTTLE-Q3' },
+  { status: 'LATE',    cutoffH: 10, cutoffM: 0,  cutoffLabel: '10:00 AM', city: 'FREMONT',  delivery: '5871234', job: '4001234', product: 'LABEL ROLL 8.5x11',  timeInStatus: '6:45',  orderQty: 1500000, truck: 'SHUTTLE-Q3', customer: 'Acme Corp',        jobStart: '04/01/26 8:30 AM',  jobFinish: '04/02/26 2:45 PM',  dueDate: '04/02/26 10:00 AM', warehouse: 'MCC PLANT' },
+  { status: 'ON TIME', cutoffH: 14, cutoffM: 0,  cutoffLabel: '2:00 PM',  city: 'LONDON',   delivery: '5874321', job: '4004321', product: 'CARDSTOCK 10x12',     timeInStatus: '3:22',  orderQty: 95000,   truck: 'SHIPPED',    customer: 'PrintCo Inc',      jobStart: '03/31/26 10:15 AM', jobFinish: '04/02/26 1:20 PM',  dueDate: '04/02/26 2:00 PM',  warehouse: 'EXTERNAL'   },
+  { status: 'DELAYED', cutoffH: 14, cutoffM: 0,  cutoffLabel: '2:00 PM',  city: 'ORLANDO',  delivery: '5874312', job: '4004213', product: 'ENVELOPE PACK',       timeInStatus: '11:52', orderQty: 205000,  truck: '',           customer: 'Global Solutions', jobStart: '04/01/26 9:45 AM',  jobFinish: '04/02/26 12:30 PM', dueDate: '04/02/26 1:30 PM',  warehouse: 'EXTERNAL'   },
+  { status: 'ON TIME', cutoffH: 16, cutoffM: 0,  cutoffLabel: '4:00 PM',  city: 'MARKHAM',  delivery: '5879631', job: '4005126', product: 'BUSINESS CARDS',      timeInStatus: '0:35',  orderQty: 30000,   truck: '',           customer: 'NextGen Services', jobStart: '04/02/26 7:00 AM',  jobFinish: '04/02/26 11:45 AM', dueDate: '04/02/26 4:00 PM',  warehouse: 'MCC PLANT' },
+  { status: 'MOVED',   cutoffH: 10, cutoffM: 0,  cutoffLabel: '10:00 AM', city: 'BROOKLYN', delivery: '5873563', job: '4006589', product: 'POCKET FOLDER',       timeInStatus: '8:15',  orderQty: 300000,  truck: '',           customer: 'Elite Brands',     jobStart: '03/30/26 2:00 PM',  jobFinish: '04/01/26 4:30 PM',  dueDate: '04/01/26 10:00 AM', warehouse: 'MCC PLANT' },
+  { status: 'ON TIME', cutoffH: 15, cutoffM: 15, cutoffLabel: '3:15 PM',  city: 'TORONTO',  delivery: '5875432', job: '4003456', product: 'FLYERS 8.5x11',       timeInStatus: '2:45',  orderQty: 500000,  truck: 'SHUTTLE-Q1', customer: 'Marketing Plus',   jobStart: '03/31/26 11:30 AM', jobFinish: '04/02/26 10:20 AM', dueDate: '04/02/26 3:15 PM',  warehouse: 'MCC PLANT' },
+  { status: 'DELAYED', cutoffH: 12, cutoffM: 30, cutoffLabel: '12:30 PM', city: 'DETROIT',  delivery: '5872109', job: '4002987', product: 'POSTCARDS 5x7',       timeInStatus: '4:20',  orderQty: 250000,  truck: 'SHUTTLE-Q2', customer: 'Direct Mail Ltd',  jobStart: '04/01/26 1:00 PM',  jobFinish: '04/02/26 11:50 AM', dueDate: '04/02/26 12:30 PM', warehouse: 'EXTERNAL'   },
+  { status: 'ON TIME', cutoffH: 17, cutoffM: 30, cutoffLabel: '5:30 PM',  city: 'CHICAGO',  delivery: '5876543', job: '4007654', product: 'BROCHURES TRI-FOLD',  timeInStatus: '1:05',  orderQty: 150000,  truck: 'SHUTTLE-Q3', customer: 'ProPrint Group',   jobStart: '04/02/26 6:45 AM',  jobFinish: '04/02/26 9:15 AM',  dueDate: '04/02/26 5:30 PM',  warehouse: 'MCC PLANT' },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -259,12 +259,18 @@ function App() {
               <th>CITY</th>
               <th>DELIVERY #</th>
               <th>JOB #</th>
+              <th>PRODUCT</th>
               <th>PRODUCTION</th>
               <th>TIME IN STATUS</th>
               <th>RECEIPTED</th>
               <th>ORDER QTY</th>
               <th>ORDER STATUS</th>
               <th>TRUCK</th>
+              <th>CUSTOMER</th>
+              <th>JOB START</th>
+              <th>JOB FINISH</th>
+              <th>DUE DATE</th>
+              <th>WAREHOUSE</th>
             </tr>
           </thead>
           <tbody>
@@ -278,6 +284,7 @@ function App() {
                 <td>{order.city}</td>
                 <td>{order.delivery}</td>
                 <td>{order.job}</td>
+                <td>{order.product}</td>
                 <td>{order.production}</td>
                 <td>{order.timeInStatus}</td>
                 <td>{order.receipted.toLocaleString()}</td>
@@ -288,6 +295,11 @@ function App() {
                   </span>
                 </td>
                 <td>{order.truck}</td>
+                <td>{order.customer}</td>
+                <td>{order.jobStart}</td>
+                <td>{order.jobFinish}</td>
+                <td>{order.dueDate}</td>
+                <td>{order.warehouse}</td>
               </tr>
             ))}
           </tbody>
