@@ -1,31 +1,20 @@
 /* ── Reset ───────────────────────────────────────────────────────────────── */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* No outer page scroll on any device — dashboard fills the full screen */
 html, body, #root {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   overflow: hidden;
   background-color: #1a1a1a;
   color: #fff;
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
 }
 
 /* ── Dashboard shell ─────────────────────────────────────────────────────── */
-/* dvh = "dynamic viewport height" — excludes the mobile browser's address bar
-   and bottom nav chrome, so the dashboard truly fills the visible screen.
-   100vh is kept as a fallback for very old browsers. */
 .dashboard {
   background-color: #1a1a1a;
   width: 100vw;
-  height: 100vh;       /* fallback */
-  height: 100dvh;      /* mobile-aware: excludes browser chrome */
+  height: 100vh;
+  height: 100dvh;          /* mobile-aware: excludes browser chrome */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -34,7 +23,7 @@ html, body, #root {
 /* ── Header ──────────────────────────────────────────────────────────────── */
 .dashboard-header {
   flex-shrink: 0;
-  padding: clamp(8px, 1.4vw, 28px) clamp(12px, 2vw, 32px);
+  padding: clamp(8px, 1.3vw, 26px) clamp(12px, 2vw, 32px);
   border-bottom: 3px solid #00cc00;
   display: flex;
   justify-content: space-between;
@@ -44,29 +33,28 @@ html, body, #root {
 }
 
 .dashboard-header h1 {
-  /* Scales from 13 px (tiny phone) → 48 px (4K TV) */
-  font-size: clamp(13px, 2.2vw, 48px);
+  font-size: clamp(13px, 2vw, 46px);
   color: #00cc00;
   font-weight: bold;
 }
 
 .header-info {
   display: flex;
-  gap: clamp(6px, 1vw, 15px);
+  gap: clamp(6px, 1vw, 14px);
   flex-wrap: wrap;
   align-items: center;
 }
 
 .date {
-  font-size: clamp(10px, 1vw, 18px);
+  font-size: clamp(10px, 1vw, 17px);
   color: #00cc00;
 }
 
-.status {
-  font-size: clamp(9px, 0.85vw, 15px);
+.conn-badge {
+  font-size: clamp(9px, 0.85vw, 14px);
   background-color: #006600;
   color: #00cc00;
-  padding: clamp(2px, 0.3vw, 6px) clamp(4px, 0.7vw, 12px);
+  padding: clamp(2px, 0.3vw, 5px) clamp(4px, 0.7vw, 11px);
   border-radius: 3px;
 }
 
@@ -75,41 +63,104 @@ html, body, #root {
   flex-shrink: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: clamp(8px, 1.2vw, 24px);
-  padding: clamp(8px, 1.2vw, 24px) clamp(12px, 2vw, 32px);
+  gap: clamp(6px, 1.1vw, 22px);
+  padding: clamp(6px, 1.1vw, 22px) clamp(12px, 2vw, 32px);
 }
 
 .metric-card {
   background-color: #2a2a2a;
   border-left: 5px solid #00cc00;
-  padding: clamp(8px, 1.2vw, 24px);
+  padding: clamp(7px, 1.1vw, 22px);
   text-align: center;
 }
 
 .metric-label {
-  font-size: clamp(8px, 0.7vw, 15px);
+  font-size: clamp(8px, 0.7vw, 14px);
   color: #888;
   text-transform: uppercase;
-  margin-bottom: clamp(4px, 0.5vw, 12px);
+  margin-bottom: clamp(3px, 0.5vw, 10px);
 }
 
 .metric-value {
-  /* Big readable number: 20 px on phone, scales up to 64 px on TV */
-  font-size: clamp(20px, 3vw, 64px);
+  font-size: clamp(20px, 2.8vw, 62px);
   color: #00cc00;
   font-weight: bold;
 }
-
 .metric-value.metric-green { color: #00cc00; }
 .metric-value.metric-red   { color: #ff3333; }
 
+/* ── Alert banner ────────────────────────────────────────────────────────── */
+.alert-banner {
+  flex-shrink: 0;
+  background-color: #8b0000;
+  border-top: 2px solid #ff3333;
+  border-bottom: 2px solid #ff3333;
+  color: #fff;
+  padding: clamp(5px, 0.6vw, 12px) clamp(12px, 2vw, 32px);
+  font-weight: bold;
+  font-size: clamp(10px, 0.9vw, 15px);
+  text-align: center;
+  animation: pulse 1s infinite;
+}
+
+/* ── Filter bar ──────────────────────────────────────────────────────────── */
+.filter-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(5px, 0.7vw, 10px);
+  padding: clamp(5px, 0.65vw, 12px) clamp(12px, 2vw, 32px);
+  background-color: #1e1e1e;
+  border-bottom: 1px solid #2e2e2e;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  color: #888;
+  padding: clamp(3px, 0.45vw, 7px) clamp(7px, 0.9vw, 14px);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: clamp(9px, 0.75vw, 12px);
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.filter-count {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 1px 5px;
+  font-size: 0.85em;
+}
+
+/* Filter button colours */
+.filter-btn.filter-all    { color: #ccc; }
+.filter-btn.filter-late   { color: #ff3333; }
+.filter-btn.filter-delayed{ color: #ffcc00; }
+.filter-btn.filter-on-time{ color: #00cc00; }
+.filter-btn.filter-moved  { color: #888; }
+
+.filter-btn.active,
+.filter-btn:hover { border-color: currentColor; background-color: rgba(255,255,255,0.05); }
+
+.last-refreshed {
+  margin-left: auto;
+  font-size: clamp(8px, 0.72vw, 12px);
+  color: #555;
+  white-space: nowrap;
+}
+
 /* ── Table section ───────────────────────────────────────────────────────── */
-/* flex: 1 + min-height: 0 = fills all remaining vertical space and allows
-   internal scrolling if the table content is taller or wider than the box. */
 .table-section {
   flex: 1;
   min-height: 0;
-  padding: clamp(6px, 0.8vw, 18px) clamp(12px, 2vw, 32px);
+  padding: clamp(5px, 0.7vw, 16px) clamp(12px, 2vw, 32px);
   overflow: auto;
 }
 
@@ -126,121 +177,117 @@ html, body, #root {
 }
 
 .shipping-table th {
-  /* Vertical padding uses vh so row height scales with screen height,
-     filling the available space instead of leaving empty dark area */
-  padding: clamp(5px, 1.8vh, 18px) clamp(4px, 0.75vw, 13px);
+  padding: clamp(5px, 1.6vh, 16px) clamp(5px, 0.7vw, 12px);
   text-align: left;
-  font-size: clamp(9px, 0.78vw, 14px);
+  font-size: clamp(9px, 0.78vw, 13px);
   color: #00cc00;
   border-bottom: 2px solid #00cc00;
   white-space: nowrap;
 }
 
 .shipping-table td {
-  padding: clamp(5px, 1.8vh, 18px) clamp(4px, 0.75vw, 13px);
-  font-size: clamp(9px, 0.82vw, 14px);
-  border-bottom: 1px solid #333;
+  padding: clamp(5px, 1.6vh, 16px) clamp(5px, 0.7vw, 12px);
+  font-size: clamp(9px, 0.82vw, 13px);
+  border-bottom: 1px solid #2e2e2e;
   white-space: nowrap;
 }
 
 /* ── Row status styles ───────────────────────────────────────────────────── */
-.status-late    { animation: flashLate 0.8s infinite; }
-.status-caution { animation: flashCaution 1s infinite; }
-.status-ontime  { background-color: rgba(0, 200, 0, 0.1); }
-.status-moved   { background-color: rgba(100, 100, 100, 0.1); }
+.row-late    { animation: flashLate 0.8s infinite; }
+.row-delayed { animation: flashDelayed 1s infinite; }
+.row-ontime  { background-color: rgba(0, 200, 0, 0.08); }
+.row-moved   { background-color: rgba(100, 100, 100, 0.1); }
 
 @keyframes flashLate {
   0%, 100% { background-color: #5a2a2a; }
-  50%       { background-color: #ff3333; }
+  50%       { background-color: #cc2222; }
+}
+@keyframes flashDelayed {
+  0%, 100% { background-color: #4a4a1a; }
+  50%       { background-color: #888800; }
 }
 
-@keyframes flashCaution {
-  0%, 100% { background-color: #5a5a2a; }
-  50%       { background-color: #ffcc00; }
-}
-
-@keyframes flashBadge {
-  0%, 100% { background-color: #ffcc00; color: #000; }
-  50%       { background-color: #ff9900; color: #fff; }
-}
-
+/* ── Status badge (inside row) ───────────────────────────────────────────── */
 .status-badge {
   display: inline-block;
-  padding: clamp(2px, 0.3vw, 6px) clamp(3px, 0.55vw, 10px);
+  padding: clamp(2px, 0.28vw, 5px) clamp(3px, 0.55vw, 9px);
   border-radius: 3px;
   font-weight: bold;
-  font-size: clamp(8px, 0.72vw, 13px);
+  font-size: clamp(8px, 0.72vw, 12px);
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.status-late    .status-badge { background-color: #ff3333; color: #fff; }
-.status-caution .status-badge { animation: flashBadge 1s infinite; }
-.status-ontime  .status-badge { background-color: #00cc00; color: #000; }
-.status-moved   .status-badge { background-color: #666;    color: #fff; }
+.row-late    .status-badge { background-color: #ff3333; color: #fff; }
+.row-delayed .status-badge { background-color: #ffcc00; color: #000; }
+.row-ontime  .status-badge { background-color: #00cc00; color: #000; }
+.row-moved   .status-badge { background-color: #555;    color: #fff; }
 
-/* ── Ready block ─────────────────────────────────────────────────────────── */
-.ready-block {
+/* ── Live countdown ──────────────────────────────────────────────────────── */
+.countdown         { font-weight: bold; font-size: clamp(9px, 0.82vw, 13px); }
+.countdown-ok      { color: #00cc00; }
+.countdown-caution { color: #ffcc00; }
+.countdown-late    { color: #ff3333; }
+
+/* ── Order status badge (READY / NOT READY) ──────────────────────────────── */
+.order-status {
   display: inline-block;
-  width:  clamp(14px, 1.6vw, 36px);
-  height: clamp(14px, 1.6vw, 36px);
-  border-radius: 4px;
-  background-color: #00cc00;
+  padding: clamp(2px, 0.28vw, 5px) clamp(4px, 0.6vw, 10px);
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: clamp(8px, 0.72vw, 12px);
+  white-space: nowrap;
 }
-
-.ready-block.ready-late    { background-color: #ff3333; }
-.ready-block.ready-caution { background-color: #ffcc00; }
-.ready-block.ready-ontime  { background-color: #00cc00; }
-.ready-block.ready-moved   { background-color: #666666; }
+.order-ready     { background-color: #00cc00; color: #000; }
+.order-not-ready { background-color: #cc3300; color: #fff; }
 
 /* ── Footer ──────────────────────────────────────────────────────────────── */
 .dashboard-footer {
   flex-shrink: 0;
   background-color: #1a1a1a;
   border-top: 3px solid #00cc00;
-  padding: clamp(5px, 0.65vw, 14px) clamp(12px, 2vw, 32px);
+  padding: clamp(5px, 0.6vw, 13px) clamp(12px, 2vw, 32px);
 }
 
 .footer-status {
   display: flex;
   flex-wrap: wrap;
-  gap: clamp(4px, 0.65vw, 10px);
+  gap: clamp(4px, 0.6vw, 10px);
   justify-content: center;
 }
 
 .status-item {
   display: inline-block;
-  font-size: clamp(8px, 0.72vw, 14px);
+  font-size: clamp(8px, 0.7vw, 13px);
   background-color: #2a2a2a;
-  padding: clamp(3px, 0.45vw, 9px) clamp(6px, 0.85vw, 16px);
-  border-left: 3px solid #666;
+  padding: clamp(3px, 0.45vw, 8px) clamp(5px, 0.8vw, 15px);
+  border-left: 3px solid #555;
   border-radius: 4px;
   white-space: nowrap;
   font-weight: bold;
 }
 
-/* Status item colours */
-.status-item.status-ontime   { color: #00cc00; border-left-color: #00cc00; }
-.status-item.status-caution  { color: #ffcc00; border-left-color: #ffcc00; }
-.status-item.status-critical { color: #ff3333; border-left-color: #ff3333; animation: pulse 1s infinite; }
-.status-item.status-moved    { color: #888;    border-left-color: #666; }
-.status-item.status-webhook  { color: #00cc00; border-left-color: #00cc00; }
-.status-item.status-warehouse{ color: #ffcc00; border-left-color: #ffcc00; }
-.status-item.status-refresh  { color: #00cc00; border-left-color: #00cc00; }
-.status-item.status-external { color: #00cc00; border-left-color: #00cc00; }
+.si-ontime   { color: #00cc00; border-left-color: #00cc00; }
+.si-delayed  { color: #ffcc00; border-left-color: #ffcc00; }
+.si-late     { color: #ff3333; border-left-color: #ff3333; animation: pulse 1s infinite; }
+.si-moved    { color: #888;    border-left-color: #666; }
+.si-webhook  { color: #00cc00; border-left-color: #00cc00; }
+.si-warehouse{ color: #ffcc00; border-left-color: #ffcc00; }
+.si-refresh  { color: #00cc00; border-left-color: #00cc00; }
+.si-external { color: #00cc00; border-left-color: #00cc00; }
 
+/* ── Shared animations ───────────────────────────────────────────────────── */
 @keyframes pulse {
   0%, 100% { opacity: 1;   }
-  50%       { opacity: 0.6; }
+  50%       { opacity: 0.5; }
 }
 
 /* ── Mobile: stack header + 2-column metrics ─────────────────────────────── */
-/* Only layout changes at small widths — all sizes still use clamp() above   */
 @media (max-width: 600px) {
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
   }
-
   .metrics-section {
     grid-template-columns: repeat(2, 1fr);
   }
