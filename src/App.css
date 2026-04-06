@@ -292,3 +292,26 @@ html, body, #root {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ── Desktop / Laptop / TV (769px+): fit all columns without scrolling ──────
+   table-layout:fixed divides available width equally across all 19 columns.
+   white-space:normal lets cell text wrap within that fixed width instead of
+   forcing the table wider than the screen. overflow-x:hidden on the section
+   ensures no horizontal scrollbar ever appears. Phone/tablet keep auto scroll. */
+@media (min-width: 769px) {
+  .table-section {
+    overflow-x: hidden;
+  }
+
+  .shipping-table {
+    table-layout: fixed;
+  }
+
+  .shipping-table th,
+  .shipping-table td {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    vertical-align: top;
+  }
+}
