@@ -307,6 +307,7 @@ html, body, #root {
 
   .shipping-table {
     table-layout: fixed;
+    height: 100%; /* stretch table to fill section — rows share extra space evenly, no blank gap */
   }
 
   .shipping-table th,
