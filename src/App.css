@@ -296,11 +296,14 @@ html, body, #root {
 /* ── Desktop / Laptop / TV (769px+): fit all columns without scrolling ──────
    table-layout:fixed divides available width equally across all 19 columns.
    white-space:normal lets cell text wrap within that fixed width instead of
-   forcing the table wider than the screen. overflow-x:hidden on the section
-   ensures no horizontal scrollbar ever appears. Phone/tablet keep auto scroll. */
+   forcing the table wider than the screen. overflow:hidden on the section
+   eliminates both horizontal and vertical scrollbars entirely.
+   Vertical padding uses vh units so row heights scale with screen height,
+   keeping all 8 rows visible without scroll on any size screen.
+   Phone/tablet keep auto scroll. */
 @media (min-width: 769px) {
   .table-section {
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .shipping-table {
@@ -313,5 +316,7 @@ html, body, #root {
     word-break: break-word;
     overflow-wrap: break-word;
     vertical-align: top;
+    padding-top: clamp(3px, 1vh, 12px);
+    padding-bottom: clamp(3px, 1vh, 12px);
   }
 }
