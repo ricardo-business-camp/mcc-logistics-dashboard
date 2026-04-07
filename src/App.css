@@ -310,7 +310,18 @@ html, body, #root {
     height: 100%; /* stretch table to fill section — rows share extra space evenly, no blank gap */
   }
 
-  .shipping-table th,
+  /* Headers: allow wrapping so full title is always readable */
+  .shipping-table th {
+    white-space: normal;
+    word-break: break-word;
+    overflow: visible;
+    text-overflow: clip;
+    vertical-align: bottom;
+    padding-top: clamp(3px, 1vh, 12px);
+    padding-bottom: clamp(3px, 1vh, 12px);
+  }
+
+  /* Data cells: single line with ellipsis for long values */
   .shipping-table td {
     white-space: nowrap;
     overflow: hidden;
