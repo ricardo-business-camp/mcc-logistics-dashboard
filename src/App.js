@@ -192,7 +192,7 @@ function App() {
 
       {/* ── HEADER ─────────────────────────────────────────────────── */}
       <div className="dashboard-header">
-        <h1>MCC LOGISTICS COMMAND CENTRE</h1>
+        <h1>LOGISTICS COMMAND CENTRE</h1>
         <div className="header-info">
           <span className="date" ref={clockRef}></span>
           <span className="conn-badge">
